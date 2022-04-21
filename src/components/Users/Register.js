@@ -1,5 +1,11 @@
 import * as React from 'react';
+import { useState } from 'react';
 import Image from "../../images/imagen1.jpg";
+import httpClient from '../../utils/httpClient';
+import Sucess from './SucessRegister';
+
+
+//mui components
 
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
@@ -11,13 +17,35 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 
 export default function Register() {
+  
+  const [newSale, setNewSale] = useState(false)
+  const [data, setData] = useState({
+    Name: "",
+    Password: "",
+    Email: "",
+    isAdmin: false
+  })
 
-  const [mode, setMode] = React.useState('Tipo de cuenta');
+  const onSubmit = (e) => { 
+    e.preventDefault();
+    httpClient.post("/users/create", {
+      Name: data.Name,
+      Email: data.Email,
+      Password: data.Password, 
+      isAdmin: data.isAdmin
+    }).then(()=> setNewSale(true)).catch((err) => console.error(err))
+  }
 
-  const handleChange = (event) => {
-    setMode(event.target.value);
-  };
-
+  const handleInputChange = (event) => {
+    console.log(event.target.value)
+    setData({
+      ...data,
+      [event.target.name] : event.target.value
+    })
+  }
+  if(newSale){
+    return <Sucess/>
+  }
   return (
     <div>
     <Box
@@ -37,34 +65,35 @@ export default function Register() {
       <img src={Image} width="355" height="220" style={{marginLeft: "0px", marginTop: "30px", marginBottom: "30px", borderRadius: "5px"}}/>
         <FormControl variant="standard" fullWidth>
         <Grid item xs={12} mb='20px'>
-            <TextField  label="Nombre y Apellido" demo-helper-text-misaligned variant="outlined" fullWidth id="fullWidth" size="small"/>
+            <TextField  label="Nombre y Apellido" name="Name" demo-helper-text-misaligned variant="outlined" fullWidth id="fullWidth" size="small" onChange={handleInputChange}/>
           </Grid>
           <Grid item xs={12} mb='20px'>
-            <TextField  label="Email" variant="outlined" fullWidth id="fullWidth" size="small"/>
+            <TextField  label="Email" variant="outlined" name="Email" fullWidth id="fullWidth" size="small" onChange={handleInputChange}/>
           </Grid>
           <Grid item xs={12} mb='20px'>
-          <TextField standard-adornment-password label="Contraseña" variant="outlined" fullWidth id="fullWidth" mb="10px" size="small"/>
+          <TextField standard-adornment-password label="Contraseña" name="Password" variant="outlined" fullWidth id="fullWidth" mb="10px" size="small" onChange={handleInputChange}/>
           </Grid>
           <TextField  label="Repetir Contraseña" variant="outlined" fullWidth id="fullWidth" size="small"/>
           <FormControl variant="filled" sx={{ mt: 2.5, height: '50px' }}>
             <Grid item xs={12} fullWidth>
-            <InputLabel id="demo-simple-select-autowidth-label" size="small" fullWidth>Tipo de cuenta</InputLabel>
+            <InputLabel id="demo-simple-select-autowidth-label" size="small" name="ItsAdmin" fullWidth>Tipo de cuenta</InputLabel>
               <Select
                 labelId="demo-simple-select-autowidth-label" 
                 id="demo-simple-select-autowidth"
-                value={mode}
-                onChange={handleChange}
+                value={data.isAdmin}
+                onChange={handleInputChange}
                 fullWidth
                 label="tipo de cuenta"
+                name='isAdmin'
               >
-                  <MenuItem value={10}>Vendedor/a</MenuItem>
-                  <MenuItem value={20}>Administrador/a</MenuItem>
+                  <MenuItem value={false}>Vendedor/a</MenuItem>
+                  <MenuItem value={true}>Administrador/a</MenuItem>
                 </Select>
             </Grid>
             </FormControl>
         
             <Grid item xs={12} mt="40px">
-              <Button variant="contained" fullWidth>Crear Cuenta</Button>
+              <Button variant="contained" fullWidth onClick={onSubmit}>Crear Cuenta</Button>
             </Grid>
         </FormControl>
       </Grid>

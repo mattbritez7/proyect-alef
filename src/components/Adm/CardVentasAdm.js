@@ -1,4 +1,9 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
+import httpClient from '../../utils/httpClient';
+
+//mui components
+
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -9,31 +14,15 @@ import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { useEffect, useState } from 'react';
-import httpClient from '../../utils/httpClient';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 
 
-
-function createData(name, datos) {
-  return { name, datos };
-}
-
-const rows = [
-  createData('Nombre:', "ezequiel datolo"),
-  createData('Dni:', "23732534"),
-  createData('Fecha de Nacimiento:', "26/7/2000"),
-  createData('Direccion del comercio:', "aristobulo del valle 2100"),
-  createData('Entre calles:', "correa y juan garay"),
-  createData('Direccion casa', "aristobulo del valle 2100"),
-  createData('Localidad:', "Lanus"),
-  createData('Telefono 1:', "1153863836"),
-  createData('Telefono 2:', "1167983456"),
-];
 
 
 export default function CardVentas() {
-
   const [sell, setSell] = useState([])
+  const [newSale, setNewSale] = useState(false)
   
   useEffect( () => {
       httpClient.get("/tasks").then((res) => {
@@ -43,14 +32,15 @@ export default function CardVentas() {
       })
   }, [])
 
-  
-
-
   return (
     <>
+     <Box sx={{ width: 1 }} display="grid">
+      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 3 }}>
+        
     {sell.map(item => {
       return(
-    <TableContainer component={Paper} sx={{ maxWidth: 450, padding: "15px", marginTop: "10px", marginBottom: "10px"}}>
+        <Grid item xs={12}  sm={12} md={4}>
+    <TableContainer style={{ margin: '0 auto'}} component={Paper} sx={{ maxWidth: 450, padding: "15px", marginTop: "10px", marginBottom: "10px"}}>
       <Table sx={{ maxWidth: 450 }} aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -151,8 +141,13 @@ export default function CardVentas() {
               </TableBody>
               </Table>
               </TableContainer>
-              )
-            })}
+              </Grid>
+            )
+            
+          })}
+            </Grid>
+      
+    </Box>
             </>
   );
 }

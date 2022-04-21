@@ -7,7 +7,7 @@ import DrawerVen from "./components/Ven/DrawerVen"
 import Inicio from "./components/Inicio"
 import CardVentasVen from "./components/Ven/CardVentasVen"
 import CardVentasAdm from "./components/Adm/CardVentasAdm"
-import Card from "./components/Adm/Card"
+
 
 
 const App = () => {
@@ -22,7 +22,6 @@ const App = () => {
             <Route exact path="/inicio" component={Inicio}/>
             <Route exact path="/mis-ventas" component={CardVentasVen}/>
             <Route exact path="/ventas" component={CardVentasAdm}/>
-            <Route exact path="/ventasS" component={Card}/>
             
         </Switch>
         </Router>

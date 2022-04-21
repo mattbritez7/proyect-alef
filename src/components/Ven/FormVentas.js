@@ -1,6 +1,8 @@
 import * as React from 'react';
 import {useState} from "react";
 import httpClient from "../../utils/httpClient";
+import Loading from './Loading';
+
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -9,7 +11,7 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 
 const FormVentas = () => {
-
+  const [newSale, setNewSale] = useState(false)
   const [data, setData] = useState({
       Nombre: "",
       Dni: "",
@@ -35,7 +37,8 @@ const FormVentas = () => {
       Localidad: data.Localidad,
       Telefono1: data.Telefono1,
       Telefono2: data.Telefono2 
-    })
+    }).then(()=> setNewSale(true)).catch((err) => console.error(err))
+
   }
 
   const handleInputChange = (event) => {
@@ -43,6 +46,11 @@ const FormVentas = () => {
       ...data,
       [event.target.name] : event.target.value
     })
+  }
+
+
+  if(newSale){
+    return <Loading/>
   }
 
   return (
@@ -58,7 +66,7 @@ const FormVentas = () => {
       <Grid
         container
         spacing={2}
-        style={{ width: '100%', maxWidth: '380px', margin: '0 auto ', paddingRight:'10px' }}
+        style={{ width: '100%', maxWidth: '380px', margin: '0 auto ', paddingRight:'10px',paddingBottom:"100px" }}
       >
       <Grid item xs={12}>
         <FormControl variant="standard" fullWidth>
@@ -90,7 +98,8 @@ const FormVentas = () => {
           <TextField  label="Telefono 2" name="Telefono2"variant="outlined" fullWidth id="fullWidth" size="small"onChange={handleInputChange} required/>
         
             <Grid item xs={12} mt="40px">
-              <Button variant="contained" type="submit" fullWidth onClick={onSubmit}>Subir venta</Button>
+            
+              <Button variant="contained" type="submit" fullWidth onClick={onSubmit} >Subir venta</Button>
             </Grid>
         
         </FormControl>
