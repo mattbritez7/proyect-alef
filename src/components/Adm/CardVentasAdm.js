@@ -24,7 +24,7 @@ export default function CardVentas() {
   const [sell, setSell] = useState([])
   const [newSale, setNewSale] = useState(false)
   
-  useEffect( () => {
+  useEffect( function fetchTask () {
       httpClient.get("/tasks").then((res) => {
        const data = res.data
        console.log(data)
@@ -32,37 +32,59 @@ export default function CardVentas() {
       })
   }, [])
 
+
+
+  const deleteTask = (id) => {
+    httpClient.delete(`/tasks/${id}`).then((res) => {
+      const data = res.data
+      console.log(data)
+    }).then(() => {
+      httpClient.get("/tasks").then((res) => {
+        const data = res.data
+        console.log(data)
+        setSell(data)
+       })
+    })
+  }
+
+  const editTask = (id) => {
+    httpClient.get(`/tasks/${id}`).then((res) => {
+      const data = res.data
+      console.log(data)
+    })
+  }
+
   return (
     <>
-     <Box sx={{ width: 1 }} display="grid">
-      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 3 }}>
+     <Box sx={{ width: 1 }} display="grid" >
+      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 3 }} >
         
-    {sell.map(item => {
+    {sell.map((item)=> {
       return(
-        <Grid item xs={12}  sm={12} md={4}>
-    <TableContainer style={{ margin: '0 auto'}} component={Paper} sx={{ maxWidth: 450, padding: "15px", marginTop: "10px", marginBottom: "10px"}}>
-      <Table sx={{ maxWidth: 450 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell sx={{ padding: '5px', fontSize: "20px"}}>Matt Britez</TableCell>
-          <IconButton aria-label="delete" sx={{marginLeft:"140px"}}>
-        <DeleteIcon />
-      </IconButton>
-      <IconButton aria-label="delete" sx={{paddingLeft:"5px"}}>
-        <EditIcon />
-      </IconButton>
+        <Grid item xs={12}  sm={12} md={4}  key={item._id}>
+    <TableContainer style={{ margin: '0 auto'}} component={Paper} sx={{ maxWidth: 450, padding: "15px", marginTop: "10px"}} key={item._id}>
+      <Table sx={{ maxWidth: 450 }} aria-label="simple table"  key={item._id}>
+        <TableHead  key={item._id}>
+          <TableRow  key={item._id}>
+            <TableCell sx={{ padding: '5px', fontSize: "20px"}} key={item._id}>Matt Britez</TableCell>
+          <IconButton aria-label="delete" sx={{marginLeft:"140px"}}  key={item._id}>
+        <DeleteIcon  key={item._id} onClick={()=>deleteTask(item._id) } />
+      </IconButton >
+      <IconButton aria-label="edit" sx={{paddingLeft:"5px"}}  key={item._id}>
+        <EditIcon key={item._id} onClick={() => editTask(item._id)}/>
+      </IconButton  >
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody  key={item._id}>
 
               <TableRow
                 key={item._id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
-                <TableCell component="th" scope="center" sx={{ padding: '5px'}}>
+                <TableCell component="th" scope="center" sx={{ padding: '5px'}}  key={item._id}>
                   Nombre y Apellido:
                 </TableCell>
-                <TableCell align="right" sx={{ padding: '5px'}}>{item.Nombre}</TableCell>
+                <TableCell align="right" sx={{ padding: '5px'}} key={item._id}>{item.Nombre}</TableCell>
                 </TableRow>
 
                 <TableRow
@@ -72,7 +94,7 @@ export default function CardVentas() {
                 <TableCell component="th" scope="center" sx={{ padding: '5px'}}>
                   Dni:
                 </TableCell>
-                <TableCell align="right" sx={{ padding: '5px'}}>{item.Dni}</TableCell>
+                <TableCell align="right" sx={{ padding: '5px'}} key={item._id}>{item.Dni}</TableCell>
 
                 </TableRow>
                 <TableRow
@@ -82,7 +104,7 @@ export default function CardVentas() {
                 <TableCell component="th" scope="center" sx={{ padding: '5px'}}>
                   Fecha de Nacimiento:
                 </TableCell>
-                <TableCell align="right" sx={{ padding: '5px'}}>{item.FechaDeNacimiento}</TableCell>
+                <TableCell align="right" sx={{ padding: '5px'}} key={item._id}>{item.FechaDeNacimiento}</TableCell>
                 </TableRow>
                 <TableRow
                 key={item._id}
@@ -91,7 +113,7 @@ export default function CardVentas() {
                 <TableCell component="th" scope="center" sx={{ padding: '5px'}}>
                     Direccion Del Comercio:
                 </TableCell>
-                <TableCell align="right" sx={{ padding: '5px'}}>{item.DireccionDelComercio}</TableCell>
+                <TableCell align="right" sx={{ padding: '5px'}} key={item._id}>{item.DireccionDelComercio}</TableCell>
                 </TableRow>
                 <TableRow
                 key={item._id}
@@ -100,7 +122,7 @@ export default function CardVentas() {
                 <TableCell component="th" scope="center" sx={{ padding: '5px'}}>
                 Entre Calles:
                 </TableCell>
-                <TableCell align="right" sx={{ padding: '5px'}}>{item.EntreCalles}</TableCell>
+                <TableCell align="right" sx={{ padding: '5px'}} key={item._id}>{item.EntreCalles}</TableCell>
                 </TableRow>
                 <TableRow
                 key={item._id}
@@ -109,7 +131,7 @@ export default function CardVentas() {
                 <TableCell component="th" scope="center" sx={{ padding: '5px'}}>
                   Direccion De La Casa:
                 </TableCell>
-                <TableCell align="right" sx={{ padding: '5px'}}>{item.DireccionCasa}</TableCell>
+                <TableCell align="right" sx={{ padding: '5px'}} key={item._id}>{item.DireccionCasa}</TableCell>
                 </TableRow>
                 <TableRow
                 key={item._id}
@@ -118,7 +140,7 @@ export default function CardVentas() {
                 <TableCell component="th" scope="center" sx={{ padding: '5px'}}>
                 Localidad:
                 </TableCell>
-                <TableCell align="right" sx={{ padding: '5px'}}>{item.Localidad}</TableCell>
+                <TableCell align="right" sx={{ padding: '5px'}} key={item._id}>{item.Localidad}</TableCell>
                 </TableRow>
                 <TableRow
                 key={item._id}
@@ -127,7 +149,7 @@ export default function CardVentas() {
                 <TableCell component="th" scope="center" sx={{ padding: '5px'}}>
                 Telefono 1:
                 </TableCell>
-                <TableCell align="right" sx={{ padding: '5px'}}>{item.Telefono1}</TableCell>
+                <TableCell align="right" sx={{ padding: '5px'}} key={item._id}>{item.Telefono1}</TableCell>
                 </TableRow>
                 <TableRow
                 key={item._id}
@@ -136,7 +158,7 @@ export default function CardVentas() {
                 <TableCell component="th" scope="center" sx={{ padding: '5px'}}>
                 Telefono 2:
                 </TableCell>
-                <TableCell align="right" sx={{ padding: '5px'}}>{item.Telefono2}</TableCell>
+                <TableCell align="right" sx={{ padding: '5px'}}key={item._id}>{item.Telefono2}</TableCell>
                 </TableRow>
               </TableBody>
               </Table>

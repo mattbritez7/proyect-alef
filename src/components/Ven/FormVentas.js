@@ -71,7 +71,7 @@ const FormVentas = () => {
       <Grid item xs={12}>
         <FormControl variant="standard" fullWidth>
         <Grid item xs={12} mb='40px'>
-            <TextField  label="Nombre y Apellido" name="Nombre" variant="outlined" fullWidth id="fullWidth" size="small" onChange={handleInputChange} required />
+            <TextField  label="Nombre y Apellido" name="Nombre" variant="outlined" fullWidth id="fullWidth" size="small" onChange={handleInputChange} required/>
           </Grid>
           <Grid item xs={12} mb='40px'>
             <TextField  label="Dni" name="Dni"variant="outlined" fullWidth id="fullWidth" size="small" onChange={handleInputChange} required/>

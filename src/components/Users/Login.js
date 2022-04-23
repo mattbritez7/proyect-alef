@@ -27,9 +27,9 @@ export default function Login() {
       <Grid item xs={12}>
         <FormControl variant="standard" fullWidth>
           <Grid item xs={12} mb='40px'>
-            <TextField  label="Email" variant="outlined" fullWidth id="fullWidth" size="small"/>
+            <TextField  type="email" label="Email" variant="outlined" fullWidth id="fullWidth" size="small"/>
           </Grid>
-          <TextField  label="Contraseña" variant="outlined" fullWidth id="fullWidth" size="small"/>
+          <TextField  type="password" label="Contraseña" variant="outlined" fullWidth id="fullWidth" size="small"/>
         
             <Grid item xs={12} mt="40px">
               <Button variant="contained" fullWidth>Ingresar</Button>

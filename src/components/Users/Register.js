@@ -28,7 +28,7 @@ export default function Register() {
 
   const onSubmit = (e) => { 
     e.preventDefault();
-    httpClient.post("/users/create", {
+    httpClient.post("/users/singup", {
       Name: data.Name,
       Email: data.Email,
       Password: data.Password, 
@@ -65,15 +65,15 @@ export default function Register() {
       <img src={Image} width="355" height="220" style={{marginLeft: "0px", marginTop: "30px", marginBottom: "30px", borderRadius: "5px"}}/>
         <FormControl variant="standard" fullWidth>
         <Grid item xs={12} mb='20px'>
-            <TextField  label="Nombre y Apellido" name="Name" demo-helper-text-misaligned variant="outlined" fullWidth id="fullWidth" size="small" onChange={handleInputChange}/>
+            <TextField  label="Nombre y Apellido" type="name" name="Name" demo-helper-text-misaligned variant="outlined" fullWidth id="fullWidth" size="small" onChange={handleInputChange}/>
           </Grid>
           <Grid item xs={12} mb='20px'>
-            <TextField  label="Email" variant="outlined" name="Email" fullWidth id="fullWidth" size="small" onChange={handleInputChange}/>
+            <TextField  label="Email" type="email" variant="outlined" name="Email" fullWidth id="fullWidth" size="small" onChange={handleInputChange}/>
           </Grid>
           <Grid item xs={12} mb='20px'>
-          <TextField standard-adornment-password label="Contraseña" name="Password" variant="outlined" fullWidth id="fullWidth" mb="10px" size="small" onChange={handleInputChange}/>
+          <TextField standard-adornment-password label="Contraseña" type="password" name="Password" variant="outlined" fullWidth id="fullWidth" mb="10px" size="small" onChange={handleInputChange}/>
           </Grid>
-          <TextField  label="Repetir Contraseña" variant="outlined" fullWidth id="fullWidth" size="small"/>
+          <TextField  label="Repetir Contraseña"  variant="outlined" fullWidth id="fullWidth" size="small"/>
           <FormControl variant="filled" sx={{ mt: 2.5, height: '50px' }}>
             <Grid item xs={12} fullWidth>
             <InputLabel id="demo-simple-select-autowidth-label" size="small" name="ItsAdmin" fullWidth>Tipo de cuenta</InputLabel>
