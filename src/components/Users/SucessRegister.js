@@ -12,7 +12,7 @@ export default function Sucess() {
     <Grid
         container
         spacing={2}
-        style={{ width: '100%', maxWidth: '380px', margin: '0 auto ', paddingRight:'10px',paddingBottom:"100px" }}
+        style={{ width: '100%', maxWidth: '380px', margin: '0 auto ', paddingRight:'10px',paddingBottom:"100px", paddingTop:"300px" }}
       >
             <h1 style={{paddingLeft:"130px",margin:"0px"}}>Usuario</h1>
             <h1 style={{paddingLeft:"110px",margin:"0px"}}>Registrado</h1>

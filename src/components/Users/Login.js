@@ -1,5 +1,9 @@
 import * as React from 'react';
+import { useState } from 'react';
 import Image from "../../images/imagen1.jpg";
+import httpClient from "../../utils/httpClient"
+
+//mui components
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -8,6 +12,37 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 
 export default function Login() {
+
+  const [data, setData] = useState({
+    Email: '',
+    Password: ''
+  })
+
+  const onSubmit = (e) => { 
+
+    e.preventDefault();
+    httpClient.post("/users/login", {
+      Email: data.Email,
+      Password: data.Password
+    }).then((res) => {
+      const data = res.data
+      if (data.user) {
+        localStorage.setItem('token', data.user)
+        alert('Login successful')
+        window.location.href = '/ventas'
+      } else {
+        alert('Please check your username and password')
+      }}).catch(err => {console.log(err)});
+  }
+ 
+  const handleInputChange = (event) => {
+    console.log(event.target.value)
+    setData({
+      ...data,
+      [event.target.name] : event.target.value
+    })
+  }
+
   return (
     <div>
     <Box
@@ -27,12 +62,12 @@ export default function Login() {
       <Grid item xs={12}>
         <FormControl variant="standard" fullWidth>
           <Grid item xs={12} mb='40px'>
-            <TextField  type="email" label="Email" variant="outlined" fullWidth id="fullWidth" size="small"/>
+            <TextField  type="email" label="Email" variant="outlined" name="Email"fullWidth id="fullWidth" size="small" onChange={handleInputChange}/>
           </Grid>
-          <TextField  type="password" label="Contraseña" variant="outlined" fullWidth id="fullWidth" size="small"/>
+          <TextField  type="password" label="Contraseña" variant="outlined" name="Password" fullWidth id="fullWidth" size="small" onChange={handleInputChange}/>
         
             <Grid item xs={12} mt="40px">
-              <Button variant="contained" fullWidth>Ingresar</Button>
+              <Button variant="contained" fullWidth onClick={onSubmit}>Ingresar</Button>
             </Grid>
         
         </FormControl>

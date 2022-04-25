@@ -18,23 +18,14 @@ import MenuItem from '@mui/material/MenuItem';
 
 export default function Register() {
   
-  const [newSale, setNewSale] = useState(false)
+  const [condicional, setCondicional] = useState(false)
+
   const [data, setData] = useState({
     Name: "",
     Password: "",
     Email: "",
-    isAdmin: false
+    IsAdmin: true
   })
-
-  const onSubmit = (e) => { 
-    e.preventDefault();
-    httpClient.post("/users/singup", {
-      Name: data.Name,
-      Email: data.Email,
-      Password: data.Password, 
-      isAdmin: data.isAdmin
-    }).then(()=> setNewSale(true)).catch((err) => console.error(err))
-  }
 
   const handleInputChange = (event) => {
     console.log(event.target.value)
@@ -43,7 +34,19 @@ export default function Register() {
       [event.target.name] : event.target.value
     })
   }
-  if(newSale){
+
+  const onSubmit = (e) => { 
+    e.preventDefault();
+    httpClient.post("/users/register", {
+      Name: data.Name,
+      Email: data.Email,
+      Password: data.Password, 
+      IsAdmin: data.IsAdmin
+    }).then(()=> setCondicional(true)).catch((err) => console.error(err))
+  }
+
+  
+  if(condicional){
     return <Sucess/>
   }
   return (
@@ -59,32 +62,38 @@ export default function Register() {
       <Grid
         container
         spacing={2}
-        style={{ width: '100%', maxWidth: '380px', margin: '100px auto ', paddingRight:'10px' }}
+        style={{ width: '100%', maxWidth: '380px', margin: '0 auto ', paddingRight:'10px' }}
       >
       <Grid item xs={12}>
       <img src={Image} width="355" height="220" style={{marginLeft: "0px", marginTop: "30px", marginBottom: "30px", borderRadius: "5px"}}/>
         <FormControl variant="standard" fullWidth>
         <Grid item xs={12} mb='20px'>
-            <TextField  label="Nombre y Apellido" type="name" name="Name" demo-helper-text-misaligned variant="outlined" fullWidth id="fullWidth" size="small" onChange={handleInputChange}/>
+            <TextField  label="Nombre y Apellido" type="name" name="Name" id="Job_Name2" demo-helper-text-misaligned variant="outlined" fullWidth id="fullWidth" size="small" onChange={handleInputChange}/>
           </Grid>
+
+
           <Grid item xs={12} mb='20px'>
-            <TextField  label="Email" type="email" variant="outlined" name="Email" fullWidth id="fullWidth" size="small" onChange={handleInputChange}/>
+            <TextField  label="Tu Email" name="Email" id="Job_Name" variant="outlined"  fullWidth size="small" onChange={handleInputChange}/>
           </Grid>
+
+
+
           <Grid item xs={12} mb='20px'>
-          <TextField standard-adornment-password label="Contraseña" type="password" name="Password" variant="outlined" fullWidth id="fullWidth" mb="10px" size="small" onChange={handleInputChange}/>
+          <TextField standard-adornment-password label="Contraseña" type="password" id="Job_Name3"name="Password" variant="outlined" fullWidth mb="10px" size="small" onChange={handleInputChange}/>
           </Grid>
-          <TextField  label="Repetir Contraseña"  variant="outlined" fullWidth id="fullWidth" size="small"/>
+          <TextField  label="Repetir Contraseña"  type="password" variant="outlined" fullWidth id="fullWidth" size="small"/>
           <FormControl variant="filled" sx={{ mt: 2.5, height: '50px' }}>
-            <Grid item xs={12} fullWidth>
-            <InputLabel id="demo-simple-select-autowidth-label" size="small" name="ItsAdmin" fullWidth>Tipo de cuenta</InputLabel>
+            <Grid item xs={12} >
+            <InputLabel id="demo-simple-select-autowidth-label" size="small" name="IsAdmin" fullWidth>Tipo de cuenta</InputLabel>
               <Select
                 labelId="demo-simple-select-autowidth-label" 
                 id="demo-simple-select-autowidth"
-                value={data.isAdmin}
+                
                 onChange={handleInputChange}
                 fullWidth
                 label="tipo de cuenta"
-                name='isAdmin'
+                name='IsAdmin'
+                defaultValue=""
               >
                   <MenuItem value={false}>Vendedor/a</MenuItem>
                   <MenuItem value={true}>Administrador/a</MenuItem>
@@ -92,9 +101,11 @@ export default function Register() {
             </Grid>
             </FormControl>
         
+
             <Grid item xs={12} mt="40px">
               <Button variant="contained" fullWidth onClick={onSubmit}>Crear Cuenta</Button>
             </Grid>
+
         </FormControl>
       </Grid>
       </Grid>

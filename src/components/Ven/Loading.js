@@ -9,10 +9,10 @@ export default function loading() {
     <Grid
         container
         spacing={2}
-        style={{ width: '100%', maxWidth: '380px', margin: '0 auto ', paddingRight:'10px',paddingBottom:"100px" }}
+        style={{ width: '100%', maxWidth: '380px', margin: '0 auto ', paddingRight:'10px',paddingBottom:"100px", paddingTop:"300px" }}
       >
     
-            <h1 style={{paddingLeft:"80px"}}>Venta Cargada Exitosamente!</h1>
+            <h1 style={{paddingLeft:"95px"}}>Venta Cargada Exitosamente!</h1>
             <Grid item xs={12} mt="40px"> 
             <Link to="/ventas"> 
               <Button variant="contained" type="submit" fullWidth style={{textDecoration: "none"}}>Ir A Mis Ventas</Button>

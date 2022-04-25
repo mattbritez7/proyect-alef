@@ -2,6 +2,7 @@ import * as React from 'react';
 import {useState} from "react";
 import httpClient from "../../utils/httpClient";
 import Loading from './Loading';
+import DrawerAdm  from '../Adm/DrawerAdm';
 
 
 import Box from '@mui/material/Box';
@@ -49,16 +50,18 @@ const FormVentas = () => {
   }
 
 
+  
   if(newSale){
     return <Loading/>
   }
 
   return (
     <div>
+      <DrawerAdm/>
         <Box
       component="form"
       sx={{
-        '& > :not(style)': {ml: '50px', mt: '30px', width: '300px' },
+        '& > :not(style)': { width: '300px', margin: '0 auto'},
       }}
       noValidate
       autoComplete="off"
@@ -66,9 +69,9 @@ const FormVentas = () => {
       <Grid
         container
         spacing={2}
-        style={{ width: '100%', maxWidth: '380px', margin: '0 auto ', paddingRight:'10px',paddingBottom:"100px" }}
+        style={{ width: '100%', maxWidth: '380px', margin: '0 auto', paddingRight:'10px', paddingBottom:"20px", paddingTop:"0px" }}
       >
-      <Grid item xs={12}>
+      <Grid item xs={12} style={{paddingTop:"0px"}}>
         <FormControl variant="standard" fullWidth>
         <Grid item xs={12} mb='40px'>
             <TextField  label="Nombre y Apellido" name="Nombre" variant="outlined" fullWidth id="fullWidth" size="small" onChange={handleInputChange} required/>

@@ -17,12 +17,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AodIcon from '@mui/icons-material/Aod';
+
 import { ListItemButton } from '@mui/material'
-
-
-
-
-
 import { Link } from 'react-router-dom'
 
 
@@ -142,7 +138,7 @@ export default function PersistentDrawerRight() {
         <Divider />
 
       <List>
-      <Link to="/mis-ventas" style={{textDecoration: "none"}}>
+      <Link to="/ventas" style={{textDecoration: "none"}}>
         <ListItemButton>
           <ListItemIcon>
             < AodIcon/>
