@@ -1,62 +1,57 @@
-import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import CssBaseline from '@mui/material/CssBaseline';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import * as React from "react";
+import { styled, useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+import MuiAppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import CssBaseline from "@mui/material/CssBaseline";
+import List from "@mui/material/List";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import AodIcon from '@mui/icons-material/Aod';
-import { ListItemButton } from '@mui/material'
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import AodIcon from "@mui/icons-material/Aod";
+import { ListItemButton } from "@mui/material";
 
-
-
-
-
-import { Link } from 'react-router-dom'
-
+import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
 
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
+const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
+    transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginRight: -drawerWidth,
     ...(open && {
-      transition: theme.transitions.create('margin', {
+      transition: theme.transitions.create("margin", {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
       }),
       marginRight: 0,
     }),
-  }),
+  })
 );
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
+  shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
-  transition: theme.transitions.create(['margin', 'width'], {
+  transition: theme.transitions.create(["margin", "width"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['margin', 'width'], {
+    transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -64,13 +59,13 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
   padding: theme.spacing(0, 1),
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
-  justifyContent: 'flex-start',
+  justifyContent: "flex-start",
 }));
 
 export default function PersistentDrawerRight() {
@@ -86,7 +81,7 @@ export default function PersistentDrawerRight() {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
@@ -98,7 +93,7 @@ export default function PersistentDrawerRight() {
             aria-label="open drawer"
             edge="end"
             onClick={handleDrawerOpen}
-            sx={{ ...(open && { display: 'none' }) }}
+            sx={{ ...(open && { display: "none" }) }}
           >
             <MenuIcon />
           </IconButton>
@@ -111,7 +106,7 @@ export default function PersistentDrawerRight() {
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          '& .MuiDrawer-paper': {
+          "& .MuiDrawer-paper": {
             width: drawerWidth,
           },
         }}
@@ -121,44 +116,40 @@ export default function PersistentDrawerRight() {
       >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            {theme.direction === "rtl" ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
           </IconButton>
         </DrawerHeader>
         <Divider />
         <List>
-
-      <Link to="/subir-mi-venta" style={{textDecoration: "none"}}>
-        <ListItemButton>
-          <ListItemIcon>
-            < AddCircleIcon/>
-          </ListItemIcon>
-          <ListItemText
-            primary="Subir Venta"
-          />
-        </ListItemButton>
-        </Link>
-          </List>
+          <Link to="/subir-mi-venta" style={{ textDecoration: "none" }}>
+            <ListItemButton>
+              <ListItemIcon>
+                <AddCircleIcon />
+              </ListItemIcon>
+              <ListItemText primary="Subir Venta" />
+            </ListItemButton>
+          </Link>
+        </List>
 
         <Divider />
 
-      <List>
-      <Link to="/mis-ventas" style={{textDecoration: "none"}}>
-        <ListItemButton>
-          <ListItemIcon>
-            < AodIcon/>
-          </ListItemIcon>
-          <ListItemText
-            primary="Mis Ventas"
-            
-          />
-        </ListItemButton>
-        </Link>
-          </List>
+        <List>
+          <Link to="/mis-ventas" style={{ textDecoration: "none" }}>
+            <ListItemButton>
+              <ListItemIcon>
+                <AodIcon />
+              </ListItemIcon>
+              <ListItemText primary="Mis Ventas" />
+            </ListItemButton>
+          </Link>
+        </List>
 
-          <Divider />
-
+        <Divider />
       </Drawer>
-
     </Box>
   );
 }
