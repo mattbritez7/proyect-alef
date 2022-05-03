@@ -2,7 +2,7 @@ import * as React from 'react';
 import {useState} from "react";
 import httpClient from "../../utils/httpClient";
 import Loading from './Loading';
-import DrawerAdm  from '../Adm/DrawerAdm';
+import DrawerVen  from '../Ven/DrawerVen';
 
 
 import Box from '@mui/material/Box';
@@ -13,8 +13,13 @@ import Button from '@mui/material/Button';
 
 const FormVentas = () => {
   const [newSale, setNewSale] = useState(false)
+
   const [data, setData] = useState({
+      Estado: "",
       Nombre: "",
+      Producto: "",
+      Precio: "",
+      Dias: "",
       Dni: "",
       FechaDeNacimiento: "",
       DireccionDelComercio: "",
@@ -29,7 +34,11 @@ const FormVentas = () => {
   const onSubmit = (e) => { 
     e.preventDefault();
     httpClient.post("/tasks", {
+      Estado: data.Estado,
       Nombre: data.Nombre,
+      Producto: data.Producto,
+      Precio: data.Precio,
+      Dias: data.Dias,
       Dni: data.Dni,
       FechaDeNacimiento: data.FechaDeNacimiento,
       DireccionDelComercio: data.DireccionDelComercio,
@@ -57,7 +66,7 @@ const FormVentas = () => {
 
   return (
     <div>
-      <DrawerAdm/>
+      <DrawerVen/>
         <Box
       component="form"
       sx={{
@@ -77,7 +86,16 @@ const FormVentas = () => {
             <TextField  label="Nombre y Apellido" name="Nombre" variant="outlined" fullWidth id="fullWidth" size="small" onChange={handleInputChange} required/>
           </Grid>
           <Grid item xs={12} mb='40px'>
-            <TextField  label="Dni" name="Dni"variant="outlined" fullWidth id="fullWidth" size="small" onChange={handleInputChange} required/>
+            <TextField  label="Producto" name="Producto" variant="outlined" fullWidth id="fullWidth" size="small" onChange={handleInputChange} required/>
+          </Grid>
+          <Grid item xs={12} mb='40px'>
+            <TextField  label="Precio Del Producto" name="Precio" variant="outlined" fullWidth id="fullWidth" size="small" onChange={handleInputChange} required/>
+          </Grid>
+          <Grid item xs={12} mb='40px'>
+            <TextField  label="Plan" name="Dias" variant="outlined" fullWidth id="fullWidth" size="small" onChange={handleInputChange} required/>
+          </Grid>
+          <Grid item xs={12} mb='40px'>
+            <TextField  label="Dni" name="Dni" variant="outlined" fullWidth id="fullWidth" size="small" onChange={handleInputChange} required/>
           </Grid>
           <Grid item xs={12} mb='40px'>
             <TextField  label="Fecha De Nacimiento" name="FechaDeNacimiento" variant="outlined" fullWidth id="fullWidth" size="small" onChange={handleInputChange} required/>

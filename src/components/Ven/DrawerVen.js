@@ -127,7 +127,7 @@ export default function PersistentDrawerRight() {
         <Divider />
         <List>
 
-      <Link to="/subir-venta" style={{textDecoration: "none"}}>
+      <Link to="/subir-mi-venta" style={{textDecoration: "none"}}>
         <ListItemButton>
           <ListItemIcon>
             < AddCircleIcon/>
@@ -142,7 +142,7 @@ export default function PersistentDrawerRight() {
         <Divider />
 
       <List>
-      <Link to="/ventas" style={{textDecoration: "none"}}>
+      <Link to="/mis-ventas" style={{textDecoration: "none"}}>
         <ListItemButton>
           <ListItemIcon>
             < AodIcon/>

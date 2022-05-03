@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import Image from "../../images/imagen1.jpg";
 import httpClient from '../../utils/httpClient';
-import Sucess from './SucessRegister';
+import SucessRegister from './SucessRegister';
 
 
 //mui components
@@ -21,7 +21,7 @@ export default function Register() {
   const [condicional, setCondicional] = useState(false)
 
   const [data, setData] = useState({
-    Name: "",
+    username: "",
     Password: "",
     Email: "",
     IsAdmin: true
@@ -38,16 +38,16 @@ export default function Register() {
   const onSubmit = (e) => { 
     e.preventDefault();
     httpClient.post("/users/register", {
-      Name: data.Name,
+      username: data.username,
       Email: data.Email,
       Password: data.Password, 
       IsAdmin: data.IsAdmin
-    }).then(()=> setCondicional(true)).catch((err) => console.error(err))
+    })
   }
 
   
   if(condicional){
-    return <Sucess/>
+    return <SucessRegister/>
   }
   return (
     <div>
@@ -68,7 +68,7 @@ export default function Register() {
       <img src={Image} width="355" height="220" style={{marginLeft: "0px", marginTop: "30px", marginBottom: "30px", borderRadius: "5px"}}/>
         <FormControl variant="standard" fullWidth>
         <Grid item xs={12} mb='20px'>
-            <TextField  label="Nombre y Apellido" type="name" name="Name" id="Job_Name2" demo-helper-text-misaligned variant="outlined" fullWidth id="fullWidth" size="small" onChange={handleInputChange}/>
+            <TextField  label="Nombre y Apellido" type="name" name="username" id="Job_Name2" demo-helper-text-misaligned variant="outlined" fullWidth  size="small" onChange={handleInputChange}/>
           </Grid>
 
 
@@ -88,7 +88,6 @@ export default function Register() {
               <Select
                 labelId="demo-simple-select-autowidth-label" 
                 id="demo-simple-select-autowidth"
-                
                 onChange={handleInputChange}
                 fullWidth
                 label="tipo de cuenta"

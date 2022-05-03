@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import Image from "../../images/imagen1.jpg";
 import httpClient from "../../utils/httpClient"
+import SucessLogin from "./SucessLogin"
 
 //mui components
 
@@ -14,25 +15,17 @@ import Button from '@mui/material/Button';
 export default function Login() {
 
   const [data, setData] = useState({
-    Email: '',
-    Password: ''
+    Password: '',
+    username: ""
   })
-
+  const [condicional, setCondicional] = useState(false)
   const onSubmit = (e) => { 
 
     e.preventDefault();
     httpClient.post("/users/login", {
-      Email: data.Email,
-      Password: data.Password
-    }).then((res) => {
-      const data = res.data
-      if (data.user) {
-        localStorage.setItem('token', data.user)
-        alert('Login successful')
-        window.location.href = '/ventas'
-      } else {
-        alert('Please check your username and password')
-      }}).catch(err => {console.log(err)});
+      Password: data.Password,
+      username: data.username
+    }).then(()=> setCondicional(true)).catch((err) => console.error(err))
   }
  
   const handleInputChange = (event) => {
@@ -43,6 +36,9 @@ export default function Login() {
     })
   }
 
+  if(condicional){
+    return <SucessLogin/>
+  }
   return (
     <div>
     <Box
@@ -62,7 +58,7 @@ export default function Login() {
       <Grid item xs={12}>
         <FormControl variant="standard" fullWidth>
           <Grid item xs={12} mb='40px'>
-            <TextField  type="email" label="Email" variant="outlined" name="Email"fullWidth id="fullWidth" size="small" onChange={handleInputChange}/>
+            <TextField  type="email" label="Nombre y apellido" variant="outlined" name="username"fullWidth id="fullWidth" size="small" onChange={handleInputChange}/>
           </Grid>
           <TextField  type="password" label="Contraseña" variant="outlined" name="Password" fullWidth id="fullWidth" size="small" onChange={handleInputChange}/>
         

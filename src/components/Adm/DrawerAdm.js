@@ -1,5 +1,10 @@
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
+import { Link } from 'react-router-dom'
+
+//mui components
+
+
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -17,9 +22,10 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AodIcon from '@mui/icons-material/Aod';
-
+import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import { ListItemButton } from '@mui/material'
-import { Link } from 'react-router-dom'
 
 
 const drawerWidth = 240;
@@ -121,21 +127,6 @@ export default function PersistentDrawerRight() {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-
-      <Link to="/subir-venta" style={{textDecoration: "none"}}>
-        <ListItemButton>
-          <ListItemIcon>
-            < AddCircleIcon/>
-          </ListItemIcon>
-          <ListItemText
-            primary="Subir Venta"
-          />
-        </ListItemButton>
-        </Link>
-          </List>
-
-        <Divider />
 
       <List>
       <Link to="/ventas" style={{textDecoration: "none"}}>
@@ -152,7 +143,63 @@ export default function PersistentDrawerRight() {
           </List>
 
           <Divider />
+          <List>
+      <Link to="/pendientes" style={{textDecoration: "none"}}>
+        <ListItemButton>
+          <ListItemIcon>
+          <IndeterminateCheckBoxIcon/>
+          </ListItemIcon>
+          <ListItemText
+            primary="Pendientes"
+            
+          />
+        </ListItemButton>
+        </Link>
+          </List>
+          <Divider />
+          <List>
+      <Link to="/aprobados" style={{textDecoration: "none"}}>
+        <ListItemButton>
+          <ListItemIcon>
+          <CheckCircleOutlineIcon/>
+          </ListItemIcon>
+          <ListItemText
+            primary="Aprobados"
+            
+          />
+        </ListItemButton>
+        </Link>
+          </List>
+          
+          <Divider />
+          <List>
+      <Link to="/entregados" style={{textDecoration: "none"}}>
+        <ListItemButton>
+          <ListItemIcon>
+          <DirectionsCarIcon/>
+          </ListItemIcon>
+          <ListItemText
+            primary="Entregados"
+          />
+        </ListItemButton>
+        </Link>
+          </List>
+          <Divider />
+      <List>
 
+    <Link to="/subir-venta" style={{textDecoration: "none"}}>
+      <ListItemButton>
+        <ListItemIcon>
+          < AddCircleIcon/>
+        </ListItemIcon>
+        <ListItemText
+          primary="Subir Venta"
+        />
+      </ListItemButton>
+      </Link>
+        </List>
+
+      <Divider />
       </Drawer>
 
     </Box>
