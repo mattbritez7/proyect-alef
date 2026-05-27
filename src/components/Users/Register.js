@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useState } from "react";
-import Image from "../../images/imagen1.jpg";
+import Image from "../../images/image1.jpg";
 import httpClient from "../../utils/httpClient";
-import SucessRegister from "./SucessRegister";
+import SuccessRegister from "./SuccessRegister";
 
 //mui components
 
@@ -16,7 +16,7 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 
 export default function Register() {
-  const [condicional, setCondicional] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
 
   const [data, setData] = useState({
     username: "",
@@ -43,8 +43,8 @@ export default function Register() {
     });
   };
 
-  if (condicional) {
-    return <SucessRegister />;
+  if (isRegistered) {
+    return <SuccessRegister />;
   }
   return (
     <div>
@@ -69,6 +69,7 @@ export default function Register() {
           <Grid item xs={12}>
             <img
               src={Image}
+              alt="logo"
               width="355"
               height="220"
               style={{

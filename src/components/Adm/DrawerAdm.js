@@ -21,9 +21,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AodIcon from "@mui/icons-material/Aod";
-import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
+
 import { ListItemButton } from "@mui/material";
 
 const drawerWidth = 240;
@@ -131,7 +129,7 @@ export default function PersistentDrawerRight() {
         <Divider />
 
         <List>
-          <Link to="/ventas" style={{ textDecoration: "none" }}>
+          <Link to="/sales" style={{ textDecoration: "none" }}>
             <ListItemButton>
               <ListItemIcon>
                 <AodIcon />
@@ -141,43 +139,10 @@ export default function PersistentDrawerRight() {
           </Link>
         </List>
 
-        <Divider />
-        <List>
-          <Link to="/pendientes" style={{ textDecoration: "none" }}>
-            <ListItemButton>
-              <ListItemIcon>
-                <IndeterminateCheckBoxIcon />
-              </ListItemIcon>
-              <ListItemText primary="Pendientes" />
-            </ListItemButton>
-          </Link>
-        </List>
-        <Divider />
-        <List>
-          <Link to="/aprobados" style={{ textDecoration: "none" }}>
-            <ListItemButton>
-              <ListItemIcon>
-                <CheckCircleOutlineIcon />
-              </ListItemIcon>
-              <ListItemText primary="Aprobados" />
-            </ListItemButton>
-          </Link>
-        </List>
 
         <Divider />
         <List>
-          <Link to="/entregados" style={{ textDecoration: "none" }}>
-            <ListItemButton>
-              <ListItemIcon>
-                <DirectionsCarIcon />
-              </ListItemIcon>
-              <ListItemText primary="Entregados" />
-            </ListItemButton>
-          </Link>
-        </List>
-        <Divider />
-        <List>
-          <Link to="/subir-venta" style={{ textDecoration: "none" }}>
+          <Link to="/new-sale-admin" style={{ textDecoration: "none" }}>
             <ListItemButton>
               <ListItemIcon>
                 <AddCircleIcon />

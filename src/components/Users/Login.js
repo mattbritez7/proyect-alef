@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useState } from "react";
-import Image from "../../images/imagen1.jpg";
+import Image from "../../images/image1.jpg";
 import httpClient from "../../utils/httpClient";
-import SucessLogin from "./SucessLogin";
+import SuccessLogin from "./SuccessLogin";
 
 //mui components
 
@@ -17,7 +17,7 @@ export default function Login() {
     Password: "",
     username: "",
   });
-  const [condicional, setCondicional] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const onSubmit = (e) => {
     e.preventDefault();
     httpClient
@@ -25,20 +25,19 @@ export default function Login() {
         Password: data.Password,
         username: data.username,
       })
-      .then(() => setCondicional(true))
+      .then(() => setIsLoggedIn(true))
       .catch((err) => console.error(err));
   };
 
   const handleInputChange = (event) => {
-    console.log(event.target.value);
     setData({
       ...data,
       [event.target.name]: event.target.value,
     });
   };
 
-  if (condicional) {
-    return <SucessLogin />;
+  if (isLoggedIn) {
+    return <SuccessLogin />;
   }
   return (
     <div>
@@ -62,7 +61,7 @@ export default function Login() {
         >
           <img
             src={Image}
-            alt="imagen1"
+            alt="logo"
             width="380"
             height="220"
             style={{

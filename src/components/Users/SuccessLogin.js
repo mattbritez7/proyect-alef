@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 
-export default function SucessRegister() {
+export default function SuccessLogin() {
   return (
     <>
       <Grid
@@ -21,18 +21,18 @@ export default function SucessRegister() {
           paddingTop: "300px",
         }}
       >
-        <h1 style={{ paddingLeft: "130px", margin: "0px" }}>Usuario</h1>
-        <h1 style={{ paddingLeft: "110px", margin: "0px" }}>Registrado</h1>
+        <h1 style={{ paddingLeft: "130px", margin: "0px" }}>Ingreso</h1>
+
         <h1 style={{ paddingLeft: "85px", margin: "0px" }}>correctamente</h1>
         <Grid item xs={12} mt="40px">
-          <Link to="/iniciar-sesion">
+          <Link to="/sales">
             <Button
               variant="contained"
               type="submit"
               textDecoration="none"
               fullWidth
             >
-              Iniciar sesion
+              Ir Al Panel
             </Button>
           </Link>
         </Grid>
