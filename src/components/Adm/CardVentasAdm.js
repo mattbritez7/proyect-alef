@@ -24,6 +24,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 export default function CardVentas() {
   const [sell, setSell] = useState([]);
+  const [filter, setFilter] = useState("All");
   const [data, setData] = useState({
     Estado: "Pendiente",
   });
@@ -75,9 +76,32 @@ export default function CardVentas() {
     <>
       <DrawerAdm />
 
+      <Box sx={{ display: "flex", justifyContent: "center", gap: 2, my: 2 }}>
+        {["Todas", "Pendiente", "Aprobado", "Entregado"].map((status) => (
+          <Box
+            key={status}
+            onClick={() => setFilter(status)}
+            sx={{
+              px: 3,
+              py: 1,
+              borderRadius: 2,
+              cursor: "pointer",
+              fontWeight: filter === status ? "bold" : "normal",
+              bgcolor: filter === status ? "primary.main" : "grey.200",
+              color: filter === status ? "white" : "text.primary",
+              "&:hover": { opacity: 0.8 },
+            }}
+          >
+            {status}
+          </Box>
+        ))}
+      </Box>
+
       <Box sx={{ width: 1 }} display="grid">
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 3 }}>
-          {sell.map((item, i) => {
+          {sell
+            .filter((item) => filter === "Todas" || item.Estado === filter)
+            .map((item, i) => {
             return (
               <Grid item xs={12} sm={12} md={4} key={item._id}>
                 <TableContainer

@@ -20,7 +20,7 @@ export default function loading() {
       >
         <h1 style={{ paddingLeft: "95px" }}>Venta Cargada Exitosamente!</h1>
         <Grid item xs={12} mt="40px">
-          <Link to="/ventas">
+          <Link to="/sales">
             <Button
               variant="contained"
               type="submit"
