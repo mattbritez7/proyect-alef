@@ -2,16 +2,19 @@ import * as React from "react";
 import { useState } from "react";
 import httpClient from "../../utils/httpClient";
 import Loading from "./Loading";
-import DrawerVen from "../Ven/DrawerVen";
+import Drawer from "./Drawer";
 
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
-const FormVentas = () => {
+const SaleForm = () => {
   const [newSale, setNewSale] = useState(false);
+  const [error, setError] = useState(null);
 
   const [data, setData] = useState({
     Estado: "",
@@ -32,7 +35,7 @@ const FormVentas = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     httpClient
-      .post("/tasks", {
+      .post("/sales", {
         Estado: data.Estado,
         Nombre: data.Nombre,
         Producto: data.Producto,
@@ -48,7 +51,10 @@ const FormVentas = () => {
         Telefono2: data.Telefono2,
       })
       .then(() => setNewSale(true))
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        const msg = err.response?.data?.message || "Error al subir venta";
+        setError(msg);
+      });
   };
 
   const handleInputChange = (event) => {
@@ -64,7 +70,7 @@ const FormVentas = () => {
 
   return (
     <div>
-      <DrawerVen />
+      <Drawer />
       <Box
         component="form"
         sx={{
@@ -245,8 +251,18 @@ const FormVentas = () => {
           </Grid>
         </Grid>
       </Box>
+      <Snackbar
+        open={!!error}
+        autoHideDuration={4000}
+        onClose={() => setError(null)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity="error" onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
 
-export default FormVentas;
+export default SaleForm;

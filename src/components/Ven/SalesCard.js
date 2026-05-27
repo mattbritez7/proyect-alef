@@ -1,8 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import httpClient from "../../utils/httpClient";
-import DrawerAdm from "../Adm/DrawerAdm";
-import { CopyToClipboard } from "react-copy-to-clipboard";
+import Drawer from "./Drawer";
 
 //mui components
 
@@ -13,101 +12,38 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import Select from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
-export default function CardVentas() {
+export default function SalesCard() {
   const [sell, setSell] = useState([]);
-  const [filter, setFilter] = useState("All");
-  const [data, setData] = useState({
-    Estado: "Pendiente",
-  });
+  const [error, setError] = useState(null);
 
   useEffect(function fetchTask() {
-    httpClient.get("/tasks").then((res) => {
+    httpClient.get("/sales/my-sales").then((res) => {
       const data = res.data;
-      console.log(data);
       setSell(data);
+    }).catch((err) => {
+      const msg = err.response?.data?.message || "Error al cargar ventas";
+      setError(msg);
     });
   }, []);
 
-  const deleteTask = (id) => {
-    httpClient
-      .delete(`/tasks/${id}`)
-      .then((res) => {
-        const data = res.data;
-        console.log(data);
-      })
-      .then(() => {
-        httpClient.get("/tasks").then((res) => {
-          const data = res.data;
-          console.log(data);
-          setSell(data);
-        });
-      });
-  };
-
-  const editTask = (id) => {
-    httpClient
-      .put(`/tasks/${id}`, {
-        Estado: data.Estado,
-      })
-      .then((res) => {
-        const data = res.data;
-        console.log(data);
-      });
-  };
-
-  const handleInputChange = (event) => {
-    console.log(event.target.value);
-    setData({
-      ...data,
-      [event.target.name]: event.target.value,
-    });
-  };
-
   return (
     <>
-      <DrawerAdm />
-
-      <Box sx={{ display: "flex", justifyContent: "center", gap: 2, my: 2 }}>
-        {["Todas", "Pendiente", "Aprobado", "Entregado"].map((status) => (
-          <Box
-            key={status}
-            onClick={() => setFilter(status)}
-            sx={{
-              px: 3,
-              py: 1,
-              borderRadius: 2,
-              cursor: "pointer",
-              fontWeight: filter === status ? "bold" : "normal",
-              bgcolor: filter === status ? "primary.main" : "grey.200",
-              color: filter === status ? "white" : "text.primary",
-              "&:hover": { opacity: 0.8 },
-            }}
-          >
-            {status}
-          </Box>
-        ))}
-      </Box>
-
+      <Drawer />
       <Box sx={{ width: 1 }} display="grid">
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 3 }}>
-          {sell
-            .filter((item) => filter === "Todas" || item.Estado === filter)
-            .map((item, i) => {
+          {sell.map((item, i) => {
             return (
-              <Grid item xs={12} sm={12} md={4} key={item._id}>
+              <Grid item xs={12} sm={12} md={4} key={i}>
                 <TableContainer
                   style={{ margin: "0 auto" }}
                   component={Paper}
                   sx={{ maxWidth: 450, padding: "15px", paddingTop: "10px" }}
+                  key={item._id}
                 >
                   <Table sx={{ maxWidth: 450 }} aria-label="simple table">
                     <TableHead>
@@ -115,42 +51,9 @@ export default function CardVentas() {
                         <TableCell sx={{ padding: "5px", fontSize: "20px" }}>
                           Matt Britez
                         </TableCell>
-                        <Grid item xs={12} width="122px" marginLeft="140px">
-                          <InputLabel
-                            id="demo-simple-select-label"
-                            size="small"
-                            name="Estado"
-                          ></InputLabel>
-                          <Select
-                            onChange={handleInputChange}
-                            labelId="demo-simple-select-autowidth-label"
-                            id="demo-simple-select-autowidth"
-                            defaultValue={item.Estado}
-                            backgroundColor="red"
-                            fullWidth
-                            name="Estado"
-                            onClick={() => editTask(item._id)}
-                          >
-                            <MenuItem value={"Pendiente"} width="10px">
-                              Pendiente
-                            </MenuItem>
-                            <MenuItem value={"Aprobado"} width="10px">
-                              Aprobado{" "}
-                            </MenuItem>
-                            <MenuItem value={"Entregado"} width="10px">
-                              Entregado
-                            </MenuItem>
-                          </Select>
+                        <Grid item xs={12} width="122px" marginLeft="150px">
+                          <h3>{item.Estado}</h3>
                         </Grid>
-                        <IconButton aria-label="delete">
-                          <DeleteIcon onClick={() => deleteTask(item._id)} />
-                        </IconButton>
-
-                        <CopyToClipboard text={item.DireccionDelComercio}>
-                          <IconButton aria-label="edit">
-                            <ContentCopyIcon />
-                          </IconButton>
-                        </CopyToClipboard>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -172,6 +75,7 @@ export default function CardVentas() {
                       </TableRow>
 
                       <TableRow
+                        key={item._id}
                         sx={{
                           "&:last-child td, &:last-child th": { border: 0 },
                         }}
@@ -223,6 +127,7 @@ export default function CardVentas() {
                       </TableRow>
 
                       <TableRow
+                        key={item._id}
                         sx={{
                           "&:last-child td, &:last-child th": { border: 0 },
                         }}
@@ -359,6 +264,16 @@ export default function CardVentas() {
           })}
         </Grid>
       </Box>
+      <Snackbar
+        open={!!error}
+        autoHideDuration={4000}
+        onClose={() => setError(null)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity="error" onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      </Snackbar>
     </>
   );
 }

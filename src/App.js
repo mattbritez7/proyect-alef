@@ -1,33 +1,38 @@
 import React from "react";
-import { Route, BrowserRouter as Router } from "react-router-dom";
+import { Route, Switch, BrowserRouter as Router, Redirect } from "react-router-dom";
 import Login from "./components/Users/Login";
 import Register from "./components/Users/Register";
 
-import FormVentasVen from "./components/Ven/FormVentasVen";
-import FormVentasAdm from "./components/Adm/FormVentasAdm";
-import DrawerAdm from "./components/Adm/DrawerAdm";
+import SaleForm from "./components/Ven/SaleForm";
+import AdminSaleForm from "./components/Adm/SaleForm";
+import AdminDrawer from "./components/Adm/Drawer";
 
 import Home from "./components/Home";
 
-import CardVentasVen from "./components/Ven/CardVentasVen";
-import CardVentasAdm from "./components/Adm/CardVentasAdm";
+import SalesCard from "./components/Ven/SalesCard";
+import AdminSalesCard from "./components/Adm/SalesCard";
 
-
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/Auth/ProtectedRoute";
+import AdminRoute from "./components/Auth/AdminRoute";
 
 const App = () => {
   return (
-    <div>
+    <AuthProvider>
       <Router>
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/register" component={Register} />
-        <Route exact path="/" component={DrawerAdm} />
-        <Route exact path="/new-sale" component={FormVentasVen} />
-        <Route exact path="/new-sale-admin" component={FormVentasAdm} />
-        <Route exact path="/sales" component={CardVentasAdm} />
-        <Route exact path="/my-sales" component={CardVentasVen} />
-        <Route exact path="/home" component={Home} />
+        <Switch>
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/register" component={Register} />
+          <ProtectedRoute exact path="/home" component={Home} />
+          <ProtectedRoute exact path="/new-sale" component={SaleForm} />
+          <AdminRoute exact path="/new-sale-admin" component={AdminSaleForm} />
+          <AdminRoute exact path="/" component={AdminDrawer} />
+          <AdminRoute exact path="/sales" component={AdminSalesCard} />
+          <ProtectedRoute exact path="/my-sales" component={SalesCard} />
+          <Redirect to="/login" />
+        </Switch>
       </Router>
-    </div>
+    </AuthProvider>
   );
 };
 

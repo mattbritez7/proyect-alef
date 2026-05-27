@@ -1,32 +1,45 @@
 import * as React from "react";
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 import Image from "../../images/image1.jpg";
 import httpClient from "../../utils/httpClient";
-import SuccessLogin from "./SuccessLogin";
-
-//mui components
+import { useAuth } from "../../context/AuthContext";
 
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 export default function Login() {
+  const { login } = useAuth();
+  const history = useHistory();
   const [data, setData] = useState({
     Password: "",
     username: "",
   });
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [error, setError] = useState(null);
+
   const onSubmit = (e) => {
     e.preventDefault();
+    setError(null);
     httpClient
       .post("/users/login", {
         Password: data.Password,
         username: data.username,
       })
-      .then(() => setIsLoggedIn(true))
-      .catch((err) => console.error(err));
+      .then((res) => {
+        const token = res.data.token || res.data;
+        login(token, res.data.user);
+        const isAdmin = res.data.user?.IsAdmin;
+        history.push(isAdmin ? "/sales" : "/my-sales");
+      })
+      .catch((err) => {
+        const msg = err.response?.data?.message || "Error al iniciar sesión";
+        setError(msg);
+      });
   };
 
   const handleInputChange = (event) => {
@@ -36,9 +49,6 @@ export default function Login() {
     });
   };
 
-  if (isLoggedIn) {
-    return <SuccessLogin />;
-  }
   return (
     <div>
       <Box
@@ -105,6 +115,16 @@ export default function Login() {
           </Grid>
         </Grid>
       </Box>
+      <Snackbar
+        open={!!error}
+        autoHideDuration={4000}
+        onClose={() => setError(null)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity="error" onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

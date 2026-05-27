@@ -14,9 +14,12 @@ import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 export default function Register() {
   const [isRegistered, setIsRegistered] = useState(false);
+  const [error, setError] = useState(null);
 
   const [data, setData] = useState({
     username: "",
@@ -26,7 +29,6 @@ export default function Register() {
   });
 
   const handleInputChange = (event) => {
-    console.log(event.target.value);
     setData({
       ...data,
       [event.target.name]: event.target.value,
@@ -35,12 +37,19 @@ export default function Register() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    httpClient.post("/users/register", {
-      username: data.username,
-      Email: data.Email,
-      Password: data.Password,
-      IsAdmin: data.IsAdmin,
-    });
+    setError(null);
+    httpClient
+      .post("/users/register", {
+        username: data.username,
+        Email: data.Email,
+        Password: data.Password,
+        IsAdmin: data.IsAdmin,
+      })
+      .then(() => setIsRegistered(true))
+      .catch((err) => {
+        const msg = err.response?.data?.message || "Error al registrarse";
+        setError(msg);
+      });
   };
 
   if (isRegistered) {
@@ -162,6 +171,16 @@ export default function Register() {
           </Grid>
         </Grid>
       </Box>
+      <Snackbar
+        open={!!error}
+        autoHideDuration={4000}
+        onClose={() => setError(null)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity="error" onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
