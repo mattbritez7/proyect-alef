@@ -27,13 +27,12 @@ export default function Login() {
     setError(null);
     httpClient
       .post("/users/login", {
-        Password: data.Password,
-        username: data.username,
+        password: data.Password,
+        email: data.username,
       })
       .then((res) => {
-        const token = res.data.token || res.data;
-        login(token, res.data.user);
-        const isAdmin = res.data.user?.IsAdmin;
+        login(res.data);
+        const isAdmin = res.data.IsAdmin;
         history.push(isAdmin ? "/sales" : "/my-sales");
       })
       .catch((err) => {

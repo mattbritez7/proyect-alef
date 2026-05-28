@@ -1,36 +1,27 @@
-import * as React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import httpClient from "../../utils/httpClient";
 import AdminDrawer from "./Drawer";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 
-//mui components
-
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Select from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import Typography from "@mui/material/Typography";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
+const estadoMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado" };
+const codeMap = { Pendiente: 1, Aprobado: 2, Entregado: 3 };
+
 export default function AdminSalesCard() {
+  const history = useHistory();
   const [sell, setSell] = useState([]);
   const [filter, setFilter] = useState("Todas");
   const [error, setError] = useState(null);
-  const [data, setData] = useState({
-    Estado: "Pendiente",
-  });
 
   useEffect(function fetchTask() {
     httpClient.get("/sales").then((res) => {
@@ -56,10 +47,10 @@ export default function AdminSalesCard() {
       });
   };
 
-  const editTask = (id) => {
+  const editTask = (id, name) => {
     httpClient
       .put(`/sales/${id}`, {
-        Estado: data.Estado,
+        Estado: codeMap[name],
       })
       .then(() => {
         httpClient.get("/sales").then((res) => {
@@ -70,14 +61,6 @@ export default function AdminSalesCard() {
         const msg = err.response?.data?.message || "Error al actualizar venta";
         setError(msg);
       });
-  };
-
-  const handleInputChange = (event) => {
-    console.log(event.target.value);
-    setData({
-      ...data,
-      [event.target.name]: event.target.value,
-    });
   };
 
   return (
@@ -105,268 +88,71 @@ export default function AdminSalesCard() {
         ))}
       </Box>
 
-      <Box sx={{ width: 1 }} display="grid">
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 3 }}>
-          {sell
-            .filter((item) => filter === "Todas" || item.Estado === filter)
-            .map((item, i) => {
+      {(() => {
+        const filtered = sell.filter(
+          (item) => filter === "Todas" || (estadoMap[item.Estado] || "Pendiente") === filter
+        );
+        return (
+          <Box sx={{ width: 1 }} display="grid">
+            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 3 }}>
+              {filtered.length === 0 ? (
+                <Grid item xs={12}>
+                  <Box
+                    sx={{
+                      textAlign: "center",
+                      mt: 4,
+                      color: "text.secondary",
+                      fontSize: 18,
+                    }}
+                  >
+                    Sin ventas
+                  </Box>
+                </Grid>
+              ) : (
+                filtered.map((item, i) => {
             return (
               <Grid item xs={12} sm={12} md={4} key={item._id}>
-                <TableContainer
-                  style={{ margin: "0 auto" }}
-                  component={Paper}
-                  sx={{ maxWidth: 450, padding: "15px", paddingTop: "10px" }}
+                <Paper
+                  sx={{ p: 2, cursor: "pointer", "&:hover": { opacity: 0.85 } }}
+                  onClick={() => history.push(`/sales/${item._id}`)}
                 >
-                  <Table sx={{ maxWidth: 450 }} aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell sx={{ padding: "5px", fontSize: "20px" }}>
-                          Matt Britez
-                        </TableCell>
-                        <Grid item xs={12} width="122px" marginLeft="140px">
-                          <InputLabel
-                            id="demo-simple-select-label"
-                            size="small"
-                            name="Estado"
-                          ></InputLabel>
-                          <Select
-                            onChange={handleInputChange}
-                            labelId="demo-simple-select-autowidth-label"
-                            id="demo-simple-select-autowidth"
-                            defaultValue={item.Estado}
-                            backgroundColor="red"
-                            fullWidth
-                            name="Estado"
-                            onClick={() => editTask(item._id)}
-                          >
-                            <MenuItem value={"Pendiente"} width="10px">
-                              Pendiente
-                            </MenuItem>
-                            <MenuItem value={"Aprobado"} width="10px">
-                              Aprobado{" "}
-                            </MenuItem>
-                            <MenuItem value={"Entregado"} width="10px">
-                              Entregado
-                            </MenuItem>
-                          </Select>
-                        </Grid>
-                        <IconButton aria-label="delete">
-                          <DeleteIcon onClick={() => deleteTask(item._id)} />
-                        </IconButton>
-
-                        <CopyToClipboard text={item.DireccionDelComercio}>
-                          <IconButton aria-label="edit">
-                            <ContentCopyIcon />
-                          </IconButton>
-                        </CopyToClipboard>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      <TableRow
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
+                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      {new Date(parseInt(item._id.substring(0, 8), 16) * 1000).toLocaleDateString("es-AR")}
+                    </Typography>
+                    <Box sx={{ display: "flex", gap: 0.5 }}>
+                      <Select
+                        size="small"
+                        value={estadoMap[item.Estado] || "Pendiente"}
+                        name="Estado"
+                        sx={{ fontSize: 12, height: 30 }}
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={(e) => editTask(item._id, e.target.value)}
                       >
-                        <TableCell
-                          component="th"
-                          scope="center"
-                          sx={{ padding: "5px" }}
-                        >
-                          Nombre y Apellido:
-                        </TableCell>
-                        <TableCell align="right" sx={{ padding: "5px" }}>
-                          {item.Nombre}
-                        </TableCell>
-                      </TableRow>
-
-                      <TableRow
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell
-                          component="th"
-                          scope="center"
-                          sx={{ padding: "5px" }}
-                        >
-                          Producto:
-                        </TableCell>
-                        <TableCell align="right" sx={{ padding: "5px" }}>
-                          {item.Producto}
-                        </TableCell>
-                      </TableRow>
-
-                      <TableRow
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell
-                          component="th"
-                          scope="center"
-                          sx={{ padding: "5px" }}
-                        >
-                          Precio Del producto:
-                        </TableCell>
-                        <TableCell align="right" sx={{ padding: "5px" }}>
-                          {item.Precio}
-                        </TableCell>
-                      </TableRow>
-
-                      <TableRow
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell
-                          component="th"
-                          scope="center"
-                          sx={{ padding: "5px" }}
-                        >
-                          Plan:
-                        </TableCell>
-                        <TableCell align="right" sx={{ padding: "5px" }}>
-                          {item.Dias}
-                        </TableCell>
-                      </TableRow>
-
-                      <TableRow
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell
-                          component="th"
-                          scope="center"
-                          sx={{ padding: "5px" }}
-                        >
-                          Dni:
-                        </TableCell>
-                        <TableCell align="right" sx={{ padding: "5px" }}>
-                          {item.Dni}
-                        </TableCell>
-                      </TableRow>
-                      <TableRow
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell
-                          component="th"
-                          scope="center"
-                          sx={{ padding: "5px" }}
-                        >
-                          Fecha de Nacimiento:
-                        </TableCell>
-                        <TableCell align="right" sx={{ padding: "5px" }}>
-                          {item.FechaDeNacimiento}
-                        </TableCell>
-                      </TableRow>
-                      <TableRow
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell
-                          component="th"
-                          scope="center"
-                          sx={{ padding: "5px" }}
-                        >
-                          Direccion Del Comercio:
-                        </TableCell>
-                        <TableCell align="right" sx={{ padding: "5px" }}>
-                          {item.DireccionDelComercio}
-                        </TableCell>
-                      </TableRow>
-                      <TableRow
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell
-                          component="th"
-                          scope="center"
-                          sx={{ padding: "5px" }}
-                        >
-                          Entre Calles:
-                        </TableCell>
-                        <TableCell align="right" sx={{ padding: "5px" }}>
-                          {item.EntreCalles}
-                        </TableCell>
-                      </TableRow>
-                      <TableRow
-                        key={item._id}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell
-                          component="th"
-                          scope="center"
-                          sx={{ padding: "5px" }}
-                        >
-                          Direccion De La Casa:
-                        </TableCell>
-                        <TableCell align="right" sx={{ padding: "5px" }}>
-                          {item.DireccionCasa}
-                        </TableCell>
-                      </TableRow>
-                      <TableRow
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell
-                          component="th"
-                          scope="center"
-                          sx={{ padding: "5px" }}
-                        >
-                          Localidad:
-                        </TableCell>
-                        <TableCell align="right" sx={{ padding: "5px" }}>
-                          {item.Localidad}
-                        </TableCell>
-                      </TableRow>
-                      <TableRow
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell
-                          component="th"
-                          scope="center"
-                          sx={{ padding: "5px" }}
-                        >
-                          Telefono 1:
-                        </TableCell>
-                        <TableCell align="right" sx={{ padding: "5px" }}>
-                          {item.Telefono1}
-                        </TableCell>
-                      </TableRow>
-                      <TableRow
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell
-                          component="th"
-                          scope="center"
-                          sx={{ padding: "5px" }}
-                        >
-                          Telefono 2:
-                        </TableCell>
-                        <TableCell align="right" sx={{ padding: "5px" }}>
-                          {item.Telefono2}
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                        {["Pendiente", "Aprobado", "Entregado"].map((s) => (
+                          <MenuItem key={s} value={s}>{s}</MenuItem>
+                        ))}
+                      </Select>
+                      <IconButton size="small" onClick={(e) => { e.stopPropagation(); deleteTask(item._id); }}>
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
+                  </Box>
+                  <Typography variant="body1" fontWeight="bold">
+                    {item.Nombre}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {item.Producto}
+                  </Typography>
+                </Paper>
               </Grid>
             );
-          })}
-        </Grid>
-      </Box>
+          })
+        )}
+      </Grid>
+    </Box>
+  );
+})()}
       <Snackbar
         open={!!error}
         autoHideDuration={4000}

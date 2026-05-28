@@ -1,5 +1,6 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import httpClient from "../../utils/httpClient";
 import Loading from "./Loading";
 import Drawer from "./Drawer";
@@ -15,6 +16,14 @@ import Alert from "@mui/material/Alert";
 const SaleForm = () => {
   const [newSale, setNewSale] = useState(false);
   const [error, setError] = useState(null);
+  const history = useHistory();
+
+  useEffect(() => {
+    if (newSale) {
+      const timer = setTimeout(() => history.push("/sales"), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [newSale, history]);
 
   const [data, setData] = useState({
     Estado: "",

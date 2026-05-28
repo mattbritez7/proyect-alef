@@ -11,6 +11,7 @@ import Home from "./components/Home";
 
 import SalesCard from "./components/Ven/SalesCard";
 import AdminSalesCard from "./components/Adm/SalesCard";
+import SaleDetail from "./components/SaleDetail";
 
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
@@ -28,7 +29,9 @@ const App = () => {
           <AdminRoute exact path="/new-sale-admin" component={AdminSaleForm} />
           <AdminRoute exact path="/" component={AdminDrawer} />
           <AdminRoute exact path="/sales" component={AdminSalesCard} />
+          <AdminRoute exact path="/sales/:id" component={SaleDetail} />
           <ProtectedRoute exact path="/my-sales" component={SalesCard} />
+          <ProtectedRoute exact path="/my-sales/:id" component={SaleDetail} />
           <Redirect to="/login" />
         </Switch>
       </Router>

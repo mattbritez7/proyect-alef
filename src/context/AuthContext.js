@@ -8,31 +8,30 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      httpClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      httpClient
-        .get("/users/me")
-        .then((res) => setUser(res.data))
-        .catch(() => {
-          localStorage.removeItem("token");
-          delete httpClient.defaults.headers.common["Authorization"];
-        })
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
+    httpClient
+      .get("/users/me")
+      .then((res) => {
+        const stored = localStorage.getItem("user");
+        if (stored) {
+          setUser(JSON.parse(stored));
+        } else {
+          setUser({ username: res.data });
+        }
+      })
+      .catch(() => {
+        localStorage.removeItem("user");
+        setUser(null);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
-  const login = useCallback((token, userData) => {
-    localStorage.setItem("token", token);
-    httpClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  const login = useCallback((userData) => {
+    localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
   }, []);
 
   const logout = useCallback(() => {
-    localStorage.removeItem("token");
-    delete httpClient.defaults.headers.common["Authorization"];
+    localStorage.removeItem("user");
     setUser(null);
   }, []);
 
