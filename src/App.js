@@ -1,7 +1,8 @@
 import React from "react";
 import { Route, Switch, BrowserRouter as Router, Redirect } from "react-router-dom";
 import Login from "./components/Users/Login";
-import Register from "./components/Users/Register";
+import AdminUserForm from "./components/Adm/UserForm";
+import UserList from "./components/Adm/UserList";
 
 import SaleForm from "./components/Ven/SaleForm";
 import AdminSaleForm from "./components/Adm/SaleForm";
@@ -22,7 +23,8 @@ const App = () => {
       <Router>
         <Switch>
           <Route exact path="/login" component={Login} />
-          <Route exact path="/register" component={Register} />
+          <AdminRoute exact path="/users" component={UserList} />
+          <AdminRoute exact path="/new-user" component={AdminUserForm} />
           <ProtectedRoute exact path="/home" component={Home} />
           <ProtectedRoute exact path="/new-sale" component={SaleForm} />
           <AdminRoute exact path="/new-sale-admin" component={AdminSaleForm} />
