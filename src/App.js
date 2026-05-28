@@ -9,8 +9,7 @@ import AdminDrawer from "./components/Adm/Drawer";
 
 import Home from "./components/Home";
 
-import SalesCard from "./components/Ven/SalesCard";
-import AdminSalesCard from "./components/Adm/SalesCard";
+import SalesList from "./components/SalesList";
 import SaleDetail from "./components/SaleDetail";
 
 import { AuthProvider } from "./context/AuthContext";
@@ -28,9 +27,9 @@ const App = () => {
           <ProtectedRoute exact path="/new-sale" component={SaleForm} />
           <AdminRoute exact path="/new-sale-admin" component={AdminSaleForm} />
           <AdminRoute exact path="/" component={AdminDrawer} />
-          <AdminRoute exact path="/sales" component={AdminSalesCard} />
+          <AdminRoute exact path="/sales" component={SalesList} />
           <AdminRoute exact path="/sales/:id" component={SaleDetail} />
-          <ProtectedRoute exact path="/my-sales" component={SalesCard} />
+          <ProtectedRoute exact path="/my-sales" component={SalesList} />
           <ProtectedRoute exact path="/my-sales/:id" component={SaleDetail} />
           <Redirect to="/login" />
         </Switch>

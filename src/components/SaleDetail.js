@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams, useHistory, useLocation } from "react-router-dom";
 import httpClient from "../utils/httpClient";
 import Box from "@mui/material/Box";
+
+const estadoMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado" };
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -36,7 +38,7 @@ export default function SaleDetail() {
 
   useEffect(() => {
     const endpoint = location.pathname.startsWith("/my-sales")
-      ? "/sales/my-sales"
+      ? "/sales/mis-ventas"
       : "/sales";
     httpClient.get(endpoint).then((res) => {
       const found = res.data.find((item) => item._id === id);
@@ -83,7 +85,7 @@ export default function SaleDetail() {
               {fields.map((f) => (
                 <TableRow key={f.key}>
                   <TableCell component="th" scope="row">{f.label}</TableCell>
-                  <TableCell>{sale[f.key] || "-"}</TableCell>
+                  <TableCell>{f.key === "Estado" ? (estadoMap[sale.Estado] || "Pendiente") : (sale[f.key] || "-")}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

@@ -13,6 +13,22 @@ import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
+const initialData = {
+  Estado: "",
+  Nombre: "",
+  Producto: "",
+  Precio: "",
+  Dias: "",
+  Dni: "",
+  FechaDeNacimiento: "",
+  DireccionDelComercio: "",
+  EntreCalles: "",
+  DireccionCasa: "",
+  Localidad: "",
+  Telefono1: "",
+  Telefono2: "",
+};
+
 const SaleForm = () => {
   const [newSale, setNewSale] = useState(false);
   const [error, setError] = useState(null);
@@ -25,30 +41,37 @@ const SaleForm = () => {
     }
   }, [newSale, history]);
 
-  const [data, setData] = useState({
-    Estado: "",
-    Nombre: "",
-    Producto: "",
-    Precio: "",
-    Dias: "",
-    Dni: "",
-    FechaDeNacimiento: "",
-    DireccionDelComercio: "",
-    EntreCalles: "",
-    DireccionCasa: "",
-    Localidad: "",
-    Telefono1: "",
-    Telefono2: "",
-  });
+  const [data, setData] = useState(initialData);
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    const errs = {};
+    if (!data.Nombre || data.Nombre.trim().length < 2) errs.Nombre = "Mínimo 2 caracteres";
+    if (!data.Producto) errs.Producto = "Campo obligatorio";
+    if (!data.Precio || isNaN(Number(data.Precio)) || Number(data.Precio) <= 0)
+      errs.Precio = "Debe ser un número positivo";
+    if (!data.Dias || isNaN(Number(data.Dias)) || Number(data.Dias) <= 0) errs.Dias = "Debe ser un número positivo";
+    if (!data.Dni || !/^\d{7,8}$/.test(data.Dni)) errs.Dni = "Debe tener 7 u 8 dígitos";
+    if (!data.FechaDeNacimiento) errs.FechaDeNacimiento = "Campo obligatorio";
+    if (!data.DireccionDelComercio) errs.DireccionDelComercio = "Campo obligatorio";
+    if (!data.EntreCalles) errs.EntreCalles = "Campo obligatorio";
+    if (!data.DireccionCasa) errs.DireccionCasa = "Campo obligatorio";
+    if (!data.Localidad) errs.Localidad = "Campo obligatorio";
+    if (!data.Telefono1 || !/^\d{7,}$/.test(data.Telefono1)) errs.Telefono1 = "Debe tener al menos 7 dígitos";
+    if (data.Telefono2 && !/^\d{7,}$/.test(data.Telefono2)) errs.Telefono2 = "Debe tener al menos 7 dígitos";
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
 
   const onSubmit = (e) => {
     e.preventDefault();
+    if (!validate()) return;
     httpClient
       .post("/sales", {
         Estado: data.Estado,
         Nombre: data.Nombre,
         Producto: data.Producto,
-        Precio: data.Precio,
+        Precio: Number(data.Precio),
         Dias: data.Dias,
         Dni: data.Dni,
         FechaDeNacimiento: data.FechaDeNacimiento,
@@ -67,10 +90,9 @@ const SaleForm = () => {
   };
 
   const handleInputChange = (event) => {
-    setData({
-      ...data,
-      [event.target.name]: event.target.value,
-    });
+    const { name, value } = event.target;
+    setData({ ...data, [name]: value });
+    if (errors[name]) setErrors({ ...errors, [name]: null });
   };
 
   if (newSale) {
@@ -111,6 +133,8 @@ const SaleForm = () => {
                   id="fullWidth"
                   size="small"
                   onChange={handleInputChange}
+                  error={!!errors.Nombre}
+                  helperText={errors.Nombre}
                   required
                 />
               </Grid>
@@ -123,6 +147,8 @@ const SaleForm = () => {
                   id="fullWidth"
                   size="small"
                   onChange={handleInputChange}
+                  error={!!errors.Producto}
+                  helperText={errors.Producto}
                   required
                 />
               </Grid>
@@ -130,11 +156,14 @@ const SaleForm = () => {
                 <TextField
                   label="Precio Del Producto"
                   name="Precio"
+                  type="number"
                   variant="outlined"
                   fullWidth
                   id="fullWidth"
                   size="small"
                   onChange={handleInputChange}
+                  error={!!errors.Precio}
+                  helperText={errors.Precio}
                   required
                 />
               </Grid>
@@ -142,11 +171,14 @@ const SaleForm = () => {
                 <TextField
                   label="Plan"
                   name="Dias"
+                  type="number"
                   variant="outlined"
                   fullWidth
                   id="fullWidth"
                   size="small"
                   onChange={handleInputChange}
+                  error={!!errors.Dias}
+                  helperText={errors.Dias}
                   required
                 />
               </Grid>
@@ -154,11 +186,14 @@ const SaleForm = () => {
                 <TextField
                   label="Dni"
                   name="Dni"
+                  type="number"
                   variant="outlined"
                   fullWidth
                   id="fullWidth"
                   size="small"
                   onChange={handleInputChange}
+                  error={!!errors.Dni}
+                  helperText={errors.Dni}
                   required
                 />
               </Grid>
@@ -166,11 +201,15 @@ const SaleForm = () => {
                 <TextField
                   label="Fecha De Nacimiento"
                   name="FechaDeNacimiento"
+                  type="date"
                   variant="outlined"
                   fullWidth
                   id="fullWidth"
                   size="small"
                   onChange={handleInputChange}
+                  error={!!errors.FechaDeNacimiento}
+                  helperText={errors.FechaDeNacimiento}
+                  InputLabelProps={{ shrink: true }}
                   required
                 />
               </Grid>
@@ -183,6 +222,8 @@ const SaleForm = () => {
                   id="fullWidth"
                   size="small"
                   onChange={handleInputChange}
+                  error={!!errors.DireccionDelComercio}
+                  helperText={errors.DireccionDelComercio}
                   required
                 />
               </Grid>
@@ -196,6 +237,8 @@ const SaleForm = () => {
                   id="fullWidth"
                   size="small"
                   onChange={handleInputChange}
+                  error={!!errors.EntreCalles}
+                  helperText={errors.EntreCalles}
                   required
                 />
               </Grid>
@@ -208,6 +251,8 @@ const SaleForm = () => {
                   id="fullWidth"
                   size="small"
                   onChange={handleInputChange}
+                  error={!!errors.DireccionCasa}
+                  helperText={errors.DireccionCasa}
                   required
                 />
               </Grid>
@@ -220,6 +265,8 @@ const SaleForm = () => {
                   id="fullWidth"
                   size="small"
                   onChange={handleInputChange}
+                  error={!!errors.Localidad}
+                  helperText={errors.Localidad}
                   required
                 />
               </Grid>
@@ -227,23 +274,28 @@ const SaleForm = () => {
                 <TextField
                   label="Telefono 1"
                   name="Telefono1"
+                  type="number"
                   variant="outlined"
                   fullWidth
                   id="fullWidth"
                   size="small"
                   onChange={handleInputChange}
+                  error={!!errors.Telefono1}
+                  helperText={errors.Telefono1}
                   required
                 />
               </Grid>
               <TextField
                 label="Telefono 2"
                 name="Telefono2"
+                type="number"
                 variant="outlined"
                 fullWidth
                 id="fullWidth"
                 size="small"
                 onChange={handleInputChange}
-                required
+                error={!!errors.Telefono2}
+                helperText={errors.Telefono2}
               />
 
               <Grid item xs={12} mt="40px">

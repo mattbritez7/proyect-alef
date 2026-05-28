@@ -1,8 +1,6 @@
 import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
-import { Link } from "react-router-dom";
-
-//mui components
+import { Link, useHistory } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -21,6 +19,9 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AodIcon from "@mui/icons-material/Aod";
+import LogoutIcon from "@mui/icons-material/Logout";
+
+import { useAuth } from "../../context/AuthContext";
 
 import { ListItemButton } from "@mui/material";
 
@@ -73,7 +74,14 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 export default function PersistentDrawerRight() {
   const theme = useTheme();
+  const history = useHistory();
+  const { logout } = useAuth();
   const [open, setOpen] = React.useState(false);
+
+  const handleLogout = () => {
+    logout();
+    history.replace("/login");
+  };
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -153,6 +161,14 @@ export default function PersistentDrawerRight() {
         </List>
 
         <Divider />
+        <List>
+          <ListItemButton onClick={handleLogout}>
+            <ListItemIcon>
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText primary="Cerrar Sesión" />
+          </ListItemButton>
+        </List>
       </Drawer>
     </Box>
   );

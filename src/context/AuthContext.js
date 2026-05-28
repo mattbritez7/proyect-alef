@@ -33,6 +33,7 @@ export function AuthProvider({ children }) {
   const logout = useCallback(() => {
     localStorage.removeItem("user");
     setUser(null);
+    httpClient.post("/logout").catch(() => {});
   }, []);
 
   const value = { user, loading, login, logout };

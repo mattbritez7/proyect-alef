@@ -10,13 +10,15 @@ import Typography from "@mui/material/Typography";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
+const estadoMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado" };
+
 export default function SalesCard() {
   const history = useHistory();
   const [sell, setSell] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(function fetchTask() {
-    httpClient.get("/sales/my-sales").then((res) => {
+    httpClient.get("/sales/mis-ventas").then((res) => {
       const data = res.data;
       setSell(data);
     }).catch((err) => {
@@ -49,7 +51,7 @@ export default function SalesCard() {
                       {new Date(parseInt(item._id.substring(0, 8), 16) * 1000).toLocaleDateString("es-AR")}
                     </Typography>
                     <Typography variant="caption" fontWeight="bold">
-                      {item.Estado}
+                      {estadoMap[item.Estado] || "Pendiente"}
                     </Typography>
                   </Box>
                   <Typography variant="body1" fontWeight="bold">
