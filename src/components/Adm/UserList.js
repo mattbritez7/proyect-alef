@@ -83,9 +83,14 @@ export default function UserList() {
                     <Typography variant="body2" color="text.secondary">
                       {user.Email}
                     </Typography>
-                    <Typography variant="caption" color={user.IsAdmin ? "primary" : "text.secondary"}>
-                      {user.IsAdmin ? "Administrador" : "Vendedor"}
+                    <Typography variant="caption" color="text.secondary">
+                      {user.IsAdmin ? "Administrador" : user.role === 'admin' ? "Administrador" : user.role === 'vendedor' ? "Vendedor" : "Cliente"}
                     </Typography>
+                    {user.role === 'cliente' && user.Company && (
+                      <Typography variant="caption" display="block" color="info.main">
+                        Empresa: {user.Company}
+                      </Typography>
+                    )}
                   </Box>
                   <Button size="small" variant="outlined" onClick={() => handleEdit(user)}>
                     Cambiar Contraseña

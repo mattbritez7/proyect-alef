@@ -73,7 +73,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export default function PersistentDrawerRight() {
   const theme = useTheme();
   const history = useHistory();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const [open, setOpen] = React.useState(false);
 
   const handleLogout = () => {
@@ -132,17 +132,21 @@ export default function PersistentDrawerRight() {
             )}
           </IconButton>
         </DrawerHeader>
-        <Divider />
-        <List>
-          <Link to="/new-sale" style={{ textDecoration: "none" }}>
-            <ListItemButton>
-              <ListItemIcon>
-                <AddCircleIcon />
-              </ListItemIcon>
-              <ListItemText primary="Subir Venta" />
-            </ListItemButton>
-          </Link>
-        </List>
+        {user?.role === 'admin' && (
+          <>
+            <Divider />
+            <List>
+              <Link to="/new-sale" style={{ textDecoration: "none" }}>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <AddCircleIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Subir Venta" />
+                </ListItemButton>
+              </Link>
+            </List>
+          </>
+        )}
 
         <Divider />
 
@@ -152,7 +156,7 @@ export default function PersistentDrawerRight() {
               <ListItemIcon>
                 <AodIcon />
               </ListItemIcon>
-              <ListItemText primary="Mis Ventas" />
+              <ListItemText primary="Ventas" />
             </ListItemButton>
           </Link>
         </List>

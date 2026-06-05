@@ -25,7 +25,7 @@ export default function Register() {
     username: "",
     Password: "",
     Email: "",
-    IsAdmin: true,
+    role: "vendedor",
   });
 
   const handleInputChange = (event) => {
@@ -43,7 +43,7 @@ export default function Register() {
         username: data.username,
         Email: data.Email,
         Password: data.Password,
-        IsAdmin: data.IsAdmin,
+        role: data.role,
       })
       .then(() => setIsRegistered(true))
       .catch((err) => {
@@ -146,7 +146,7 @@ export default function Register() {
                   <InputLabel
                     id="demo-simple-select-autowidth-label"
                     size="small"
-                    name="IsAdmin"
+                    name="role"
                     fullWidth
                   >
                     Tipo de cuenta
@@ -157,11 +157,11 @@ export default function Register() {
                     onChange={handleInputChange}
                     fullWidth
                     label="tipo de cuenta"
-                    name="IsAdmin"
+                    name="role"
                     defaultValue=""
                   >
-                    <MenuItem value={false}>Vendedor/a</MenuItem>
-                    <MenuItem value={true}>Administrador/a</MenuItem>
+                    <MenuItem value="vendedor">Vendedor/a</MenuItem>
+                    <MenuItem value="admin">Administrador/a</MenuItem>
                   </Select>
                 </Grid>
               </FormControl>

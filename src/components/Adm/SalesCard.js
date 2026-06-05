@@ -142,7 +142,7 @@ export default function AdminSalesCard() {
                     <Typography variant="subtitle2" color="text.secondary">
                       {new Date(parseInt(item._id.substring(0, 8), 16) * 1000).toLocaleDateString("es-AR")}
                     </Typography>
-                    {user?.IsAdmin && (
+                    {user?.role === 'admin' ? (
                       <Box sx={{ display: "flex", gap: 0.5 }}>
                         <Select
                           size="small"
@@ -175,6 +175,23 @@ export default function AdminSalesCard() {
                           <DeleteIcon fontSize="small" />
                         </IconButton>
                       </Box>
+                    ) : user?.role === 'cliente' ? (
+                      <Select
+                        size="small"
+                        value={estadoMap[item.Estado] || "Pendiente"}
+                        name="Estado"
+                        sx={{ fontSize: 12, height: 30 }}
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={(e) => editTask(item._id, e.target.value)}
+                      >
+                        {["Pendiente", "Aprobado", "Entregado"].map((s) => (
+                          <MenuItem key={s} value={s}>{s}</MenuItem>
+                        ))}
+                      </Select>
+                    ) : (
+                      <Typography variant="caption" fontWeight="bold">
+                        {estadoMap[item.Estado] || "Pendiente"}
+                      </Typography>
                     )}
                   </Box>
                   <Typography variant="body1" fontWeight="bold">

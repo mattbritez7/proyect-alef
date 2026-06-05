@@ -22,7 +22,7 @@ const codeMap = { Pendiente: 1, Aprobado: 2, Entregado: 3 };
 export default function SalesList() {
   const history = useHistory();
   const { user } = useAuth();
-  const isAdmin = user?.IsAdmin;
+  const role = user?.role;
 
   const [sell, setSell] = useState([]);
   const [companies, setCompanies] = useState([]);
@@ -32,7 +32,7 @@ export default function SalesList() {
   const [loading, setLoading] = useState(true);
 
   const fetchSales = () => {
-    const endpoint = isAdmin ? "/sales" : "/sales/mis-ventas";
+    const endpoint = role === 'admin' ? "/sales" : "/sales";
     httpClient
       .get(endpoint)
       .then((res) => {
@@ -45,7 +45,7 @@ export default function SalesList() {
       .finally(() => setLoading(false));
   };
 
-  useEffect(fetchSales, [isAdmin]);
+  useEffect(fetchSales, [role]);
 
   useEffect(() => {
     httpClient.get("/companies").then((res) => setCompanies(res.data)).catch(() => {});
@@ -93,7 +93,7 @@ export default function SalesList() {
 
   return (
     <>
-      {isAdmin ? <AdminDrawer /> : <VenDrawer />}
+      {role === 'admin' ? <AdminDrawer /> : <VenDrawer />}
 
       <Box sx={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: { xs: 0.5, sm: 2 }, my: 2, px: 1 }}>
         {["Todas", "Pendiente", "Aprobado", "Entregado"].map((status) => (
@@ -129,13 +129,13 @@ export default function SalesList() {
               <Grid item xs={12} sm={12} md={4} key={item._id}>
                 <Paper
                   sx={{ p: 2, cursor: "pointer", "&:hover": { opacity: 0.85 } }}
-                  onClick={() => history.push(`/${isAdmin ? "sales" : "my-sales"}/${item._id}`)}
+                  onClick={() => history.push(`/${role === 'admin' ? "sales" : "my-sales"}/${item._id}`)}
                 >
                   <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
                     <Typography variant="subtitle2" color="text.secondary">
                       {new Date(parseInt(item._id.substring(0, 8), 16) * 1000).toLocaleDateString("es-AR")}
                     </Typography>
-                    {isAdmin ? (
+                    {role === 'admin' ? (
                       <Box sx={{ display: "flex", gap: 0.5 }}>
                         <Select
                           size="small"
@@ -168,6 +168,19 @@ export default function SalesList() {
                           <DeleteIcon fontSize="small" />
                         </IconButton>
                       </Box>
+                    ) : role === 'cliente' ? (
+                      <Select
+                        size="small"
+                        value={estadoMap[item.Estado] || "Pendiente"}
+                        name="Estado"
+                        sx={{ fontSize: 12, height: 30 }}
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={(e) => editTask(item._id, e.target.value)}
+                      >
+                        {["Pendiente", "Aprobado", "Entregado"].map((s) => (
+                          <MenuItem key={s} value={s}>{s}</MenuItem>
+                        ))}
+                      </Select>
                     ) : (
                       <Typography variant="caption" fontWeight="bold">
                         {estadoMap[item.Estado] || "Pendiente"}

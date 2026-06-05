@@ -11,15 +11,9 @@ export function AuthProvider({ children }) {
     httpClient
       .get("/users/me")
       .then((res) => {
-        const stored = localStorage.getItem("user");
-        if (stored) {
-          setUser(JSON.parse(stored));
-        } else {
-          setUser({ username: res.data });
-        }
+        setUser(res.data);
       })
       .catch(() => {
-        localStorage.removeItem("user");
         setUser(null);
       })
       .finally(() => setLoading(false));

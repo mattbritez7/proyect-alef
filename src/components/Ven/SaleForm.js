@@ -4,6 +4,8 @@ import { useHistory } from "react-router-dom";
 import httpClient from "../../utils/httpClient";
 import Loading from "./Loading";
 import Drawer from "./Drawer";
+import { useAuth } from "../../context/AuthContext";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -33,6 +35,15 @@ const SaleForm = () => {
   const [newSale, setNewSale] = useState(false);
   const [error, setError] = useState(null);
   const history = useHistory();
+  const { user } = useAuth();
+  const [data, setData] = useState(initialData);
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (user && (user.role === 'cliente' || user.role === 'vendedor')) {
+      history.replace("/my-sales");
+    }
+  }, [user, history]);
 
   useEffect(() => {
     if (newSale) {
@@ -40,9 +51,6 @@ const SaleForm = () => {
       return () => clearTimeout(timer);
     }
   }, [newSale, history]);
-
-  const [data, setData] = useState(initialData);
-  const [errors, setErrors] = useState({});
 
   const validate = () => {
     const errs = {};

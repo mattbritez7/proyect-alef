@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import httpClient from "../../utils/httpClient";
 import AdminDrawer from "./Drawer";
 
@@ -19,10 +19,16 @@ export default function AdminUserForm() {
     username: "",
     Email: "",
     Password: "",
-    IsAdmin: false,
+    role: "vendedor",
+    Company: "",
   });
+  const [companies, setCompanies] = useState([]);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    httpClient.get("/companies").then((res) => setCompanies(res.data)).catch(() => {});
+  }, []);
 
   const handleInputChange = (event) => {
     setData({ ...data, [event.target.name]: event.target.value });
@@ -37,11 +43,12 @@ export default function AdminUserForm() {
         username: data.username,
         Email: data.Email,
         Password: data.Password,
-        IsAdmin: data.IsAdmin,
+        role: data.role,
+        Company: data.Company,
       })
       .then(() => {
         setSuccess(true);
-        setData({ username: "", Email: "", Password: "", IsAdmin: false });
+        setData({ username: "", Email: "", Password: "", role: "vendedor", Company: "" });
       })
       .catch((err) => {
         const msg = err.response?.data?.message || "Error al crear usuario";
@@ -112,15 +119,32 @@ export default function AdminUserForm() {
                 <InputLabel id="role-label">Rol</InputLabel>
                 <Select
                   labelId="role-label"
-                  name="IsAdmin"
-                  value={data.IsAdmin}
+                  name="role"
+                  value={data.role}
                   onChange={handleInputChange}
                   label="Rol"
                 >
-                  <MenuItem value={false}>Vendedor/a</MenuItem>
-                  <MenuItem value={true}>Administrador/a</MenuItem>
+                  <MenuItem value="admin">Administrador/a</MenuItem>
+                  <MenuItem value="vendedor">Vendedor/a</MenuItem>
+                  <MenuItem value="cliente">Cliente</MenuItem>
                 </Select>
               </FormControl>
+              {data.role === 'cliente' && (
+                <FormControl variant="outlined" sx={{ mb: 2 }} size="small" fullWidth>
+                  <InputLabel id="company-label">Empresa</InputLabel>
+                  <Select
+                    labelId="company-label"
+                    name="Company"
+                    value={data.Company}
+                    onChange={handleInputChange}
+                    label="Empresa"
+                  >
+                    {companies.map((c) => (
+                      <MenuItem key={c._id} value={c.name}>{c.name}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
               <Grid item xs={12} mt="20px">
                 <Button variant="contained" fullWidth onClick={onSubmit}>
                   Crear Usuario
