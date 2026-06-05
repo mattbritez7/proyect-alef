@@ -22,8 +22,10 @@ export default function AdminSalesCard() {
   const history = useHistory();
   const { user } = useAuth();
   const [sell, setSell] = useState([]);
+  const [companies, setCompanies] = useState([]);
   const [filter, setFilter] = useState("Todas");
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   useEffect(function fetchTask() {
     httpClient.get("/sales").then((res) => {
@@ -35,10 +37,15 @@ export default function AdminSalesCard() {
     });
   }, []);
 
+  useEffect(() => {
+    httpClient.get("/companies").then((res) => setCompanies(res.data)).catch(() => {});
+  }, []);
+
   const deleteTask = (id) => {
     httpClient
       .delete(`/sales/${id}`)
       .then(() => {
+        setSuccess("Venta eliminada");
         httpClient.get("/sales").then((res) => {
           setSell(res.data);
         });
@@ -65,18 +72,31 @@ export default function AdminSalesCard() {
       });
   };
 
+  const editCompany = (id, companyId) => {
+    const company = companies.find((c) => c._id === companyId);
+    httpClient
+      .put(`/sales/${id}`, { Company: company?.name || "" })
+      .then(() => {
+        httpClient.get("/sales").then((res) => setSell(res.data));
+      })
+      .catch((err) => {
+        const msg = err.response?.data?.message || "Error al asignar empresa";
+        setError(msg);
+      });
+  };
+
   return (
     <>
       <AdminDrawer />
 
-      <Box sx={{ display: "flex", justifyContent: "center", gap: 2, my: 2 }}>
+      <Box sx={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: { xs: 0.5, sm: 2 }, my: 2, px: 1 }}>
         {["Todas", "Pendiente", "Aprobado", "Entregado"].map((status) => (
           <Box
             key={status}
             onClick={() => setFilter(status)}
             sx={{
-              px: 3,
-              py: 1,
+              px: { xs: 1.5, sm: 3 },
+              py: 0.5,
               borderRadius: 2,
               cursor: "pointer",
               fontWeight: filter === status ? "bold" : "normal",
@@ -95,8 +115,8 @@ export default function AdminSalesCard() {
           (item) => filter === "Todas" || (estadoMap[item.Estado] || "Pendiente") === filter
         );
         return (
-          <Box sx={{ width: 1 }} display="grid">
-            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 3 }}>
+          <Box sx={{ width: 1, px: { xs: 1, sm: 0 } }} display="grid">
+            <Grid container rowSpacing={{ xs: 0.5, sm: 1 }} columnSpacing={{ xs: 1, sm: 3 }}>
               {filtered.length === 0 ? (
                 <Grid item xs={12}>
                   <Box
@@ -136,6 +156,21 @@ export default function AdminSalesCard() {
                             <MenuItem key={s} value={s}>{s}</MenuItem>
                           ))}
                         </Select>
+                        <Select
+                          size="small"
+                          value={item.Company || ""}
+                          name="Company"
+                          sx={{ fontSize: 12, height: 30, minWidth: 100 }}
+                          onClick={(e) => e.stopPropagation()}
+                          onChange={(e) => editCompany(item._id, e.target.value)}
+                          displayEmpty
+                          renderValue={(v) => v || "Empresa"}
+                        >
+                          <MenuItem value=""><em>Sin empresa</em></MenuItem>
+                          {companies.map((c) => (
+                            <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
+                          ))}
+                        </Select>
                         <IconButton size="small" onClick={(e) => { e.stopPropagation(); deleteTask(item._id); }}>
                           <DeleteIcon fontSize="small" />
                         </IconButton>
@@ -165,6 +200,16 @@ export default function AdminSalesCard() {
       >
         <Alert severity="error" onClose={() => setError(null)}>
           {error}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={!!success}
+        autoHideDuration={3000}
+        onClose={() => setSuccess(null)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity="success" onClose={() => setSuccess(null)}>
+          {success}
         </Alert>
       </Snackbar>
     </>

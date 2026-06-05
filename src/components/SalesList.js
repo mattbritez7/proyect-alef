@@ -25,8 +25,10 @@ export default function SalesList() {
   const isAdmin = user?.IsAdmin;
 
   const [sell, setSell] = useState([]);
+  const [companies, setCompanies] = useState([]);
   const [filter, setFilter] = useState("Todas");
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const fetchSales = () => {
@@ -45,10 +47,17 @@ export default function SalesList() {
 
   useEffect(fetchSales, [isAdmin]);
 
+  useEffect(() => {
+    httpClient.get("/companies").then((res) => setCompanies(res.data)).catch(() => {});
+  }, []);
+
   const deleteTask = (id) => {
     httpClient
       .delete(`/sales/${id}`)
-      .then(fetchSales)
+      .then(() => {
+        setSuccess("Venta eliminada");
+        fetchSales();
+      })
       .catch((err) => {
         const msg = err.response?.data?.message || "Error al eliminar venta";
         setError(msg);
@@ -67,6 +76,17 @@ export default function SalesList() {
       });
   };
 
+  const editCompany = (id, companyId) => {
+    const company = companies.find((c) => c._id === companyId);
+    httpClient
+      .put(`/sales/${id}`, { Company: company?.name || "" })
+      .then(fetchSales)
+      .catch((err) => {
+        const msg = err.response?.data?.message || "Error al asignar empresa";
+        setError(msg);
+      });
+  };
+
   const displayed = sell.filter(
     (item) => filter === "Todas" || (estadoMap[item.Estado] || "Pendiente") === filter
   );
@@ -75,14 +95,14 @@ export default function SalesList() {
     <>
       {isAdmin ? <AdminDrawer /> : <VenDrawer />}
 
-      <Box sx={{ display: "flex", justifyContent: "center", gap: 2, my: 2 }}>
+      <Box sx={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: { xs: 0.5, sm: 2 }, my: 2, px: 1 }}>
         {["Todas", "Pendiente", "Aprobado", "Entregado"].map((status) => (
           <Box
             key={status}
             onClick={() => setFilter(status)}
             sx={{
-              px: 3,
-              py: 1,
+              px: { xs: 1.5, sm: 3 },
+              py: 0.5,
               borderRadius: 2,
               cursor: "pointer",
               fontWeight: filter === status ? "bold" : "normal",
@@ -96,8 +116,8 @@ export default function SalesList() {
         ))}
       </Box>
 
-      <Box sx={{ width: 1 }} display="grid">
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 3 }}>
+      <Box sx={{ width: 1, px: { xs: 1, sm: 0 } }} display="grid">
+        <Grid container rowSpacing={{ xs: 0.5, sm: 1 }} columnSpacing={{ xs: 1, sm: 3 }}>
           {!loading && displayed.length === 0 ? (
             <Grid item xs={12}>
               <Box sx={{ textAlign: "center", mt: 4, color: "text.secondary", fontSize: 18 }}>
@@ -127,6 +147,21 @@ export default function SalesList() {
                         >
                           {["Pendiente", "Aprobado", "Entregado"].map((s) => (
                             <MenuItem key={s} value={s}>{s}</MenuItem>
+                          ))}
+                        </Select>
+                        <Select
+                          size="small"
+                          value={item.Company || ""}
+                          name="Company"
+                          sx={{ fontSize: 12, height: 30, minWidth: 100 }}
+                          onClick={(e) => e.stopPropagation()}
+                          onChange={(e) => editCompany(item._id, e.target.value)}
+                          displayEmpty
+                          renderValue={(v) => v || "Empresa"}
+                        >
+                          <MenuItem value=""><em>Sin empresa</em></MenuItem>
+                          {companies.map((c) => (
+                            <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
                           ))}
                         </Select>
                         <IconButton size="small" onClick={(e) => { e.stopPropagation(); deleteTask(item._id); }}>
@@ -160,6 +195,16 @@ export default function SalesList() {
       >
         <Alert severity="error" onClose={() => setError(null)}>
           {error}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={!!success}
+        autoHideDuration={3000}
+        onClose={() => setSuccess(null)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity="success" onClose={() => setSuccess(null)}>
+          {success}
         </Alert>
       </Snackbar>
     </>

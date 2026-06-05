@@ -60,7 +60,7 @@ export default function Register() {
       <Box
         component="form"
         sx={{
-          "& > :not(style)": { ml: "50px", mt: "30px", width: "300px" },
+          "& > :not(style)": { width: "100%", maxWidth: 380, mx: "auto" },
         }}
         noValidate
         autoComplete="off"
@@ -71,25 +71,27 @@ export default function Register() {
           style={{
             width: "100%",
             maxWidth: "380px",
-            margin: "0 auto ",
-            paddingRight: "10px",
+            margin: "0 auto",
+            padding: "0 16px 20px",
           }}
         >
           <Grid item xs={12}>
-            <img
-              src={Image}
-              alt="logo"
-              width="355"
-              height="220"
-              style={{
-                marginLeft: "0px",
-                marginTop: "30px",
-                marginBottom: "30px",
-                borderRadius: "5px",
-              }}
-            />
+            <Box sx={{ textAlign: "center", mt: { xs: 2, sm: 4 } }}>
+              <img
+                src={Image}
+                alt="logo"
+                style={{
+                  width: "100%",
+                  maxWidth: 355,
+                  height: "auto",
+                  borderRadius: "5px",
+                }}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={12}>
             <FormControl variant="standard" fullWidth>
-              <Grid item xs={12} mb="20px">
+              <Grid item xs={12} mb={{ xs: 1, sm: 1.5 }}>
                 <TextField
                   label="Nombre y Apellido"
                   type="name"
@@ -103,7 +105,7 @@ export default function Register() {
                 />
               </Grid>
 
-              <Grid item xs={12} mb="20px">
+              <Grid item xs={12} mb={{ xs: 1, sm: 1.5 }}>
                 <TextField
                   label="Tu Email"
                   name="Email"
@@ -115,7 +117,7 @@ export default function Register() {
                 />
               </Grid>
 
-              <Grid item xs={12} mb="20px">
+              <Grid item xs={12} mb={{ xs: 1, sm: 1.5 }}>
                 <TextField
                   standard-adornment-password
                   label="Contraseña"
@@ -129,15 +131,17 @@ export default function Register() {
                   onChange={handleInputChange}
                 />
               </Grid>
-              <TextField
-                label="Repetir Contraseña"
-                type="password"
-                variant="outlined"
-                fullWidth
-                id="fullWidth"
-                size="small"
-              />
-              <FormControl variant="filled" sx={{ mt: 2.5, height: "50px" }}>
+              <Grid item xs={12} mb={{ xs: 1, sm: 1.5 }}>
+                <TextField
+                  label="Repetir Contraseña"
+                  type="password"
+                  variant="outlined"
+                  fullWidth
+                  id="fullWidth"
+                  size="small"
+                />
+              </Grid>
+              <FormControl variant="filled" sx={{ mt: 2.5 }}>
                 <Grid item xs={12}>
                   <InputLabel
                     id="demo-simple-select-autowidth-label"
@@ -162,7 +166,7 @@ export default function Register() {
                 </Grid>
               </FormControl>
 
-              <Grid item xs={12} mt="40px">
+              <Grid item xs={12} mt={{ xs: 2, sm: 3 }}>
                 <Button variant="contained" fullWidth onClick={onSubmit}>
                   Crear Cuenta
                 </Button>

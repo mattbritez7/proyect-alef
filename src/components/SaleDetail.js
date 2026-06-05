@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams, useHistory, useLocation } from "react-router-dom";
 import httpClient from "../utils/httpClient";
 import Box from "@mui/material/Box";
-
-const estadoMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado" };
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -13,6 +11,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+
+const estadoMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado" };
 
 const fields = [
   { label: "Estado", key: "Estado" },
@@ -65,16 +65,16 @@ export default function SaleDetail() {
   });
 
   return (
-    <Box sx={{ maxWidth: 500, mx: "auto", mt: 4 }}>
-      <Button variant="outlined" sx={{ mb: 2 }} onClick={() => history.goBack()}>
+    <Box sx={{ maxWidth: 500, mx: "auto", mt: { xs: 1, sm: 4 }, px: { xs: 1, sm: 0 } }}>
+      <Button variant="outlined" sx={{ mb: 2, ml: { xs: 1, sm: 0 } }} onClick={() => history.goBack()}>
         Volver
       </Button>
-      <Paper sx={{ p: 2 }}>
-        <Typography variant="h6" sx={{ mb: 2, textAlign: "center" }}>
+      <Paper sx={{ p: { xs: 1, sm: 2 } }}>
+        <Typography variant="h6" sx={{ mb: 2, textAlign: "center", fontSize: { xs: 14, sm: 20 } }}>
           Creado el {formattedDate}
         </Typography>
-        <TableContainer>
-          <Table>
+        <TableContainer sx={{ overflowX: "auto" }}>
+          <Table size="small">
             <TableHead>
               <TableRow>
                 <TableCell sx={{ fontWeight: "bold" }}>Campo</TableCell>

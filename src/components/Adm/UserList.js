@@ -58,9 +58,9 @@ export default function UserList() {
   return (
     <>
       <AdminDrawer />
-      <Box sx={{ width: 1, maxWidth: 600, mx: "auto", mt: 4 }}>
+      <Box sx={{ width: 1, maxWidth: 600, mx: "auto", mt: { xs: 1, sm: 4 }, px: { xs: 1, sm: 0 } }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-          <Typography variant="h6">Usuarios</Typography>
+          <Typography variant="h6" sx={{ fontSize: { xs: 16, sm: 20 } }}>Usuarios</Typography>
           <Button variant="contained" onClick={() => history.push("/new-user")}>
             Crear Usuario
           </Button>

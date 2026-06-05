@@ -53,7 +53,7 @@ export default function Login() {
       <Box
         component="form"
         sx={{
-          "& > :not(style)": { ml: "50px", mt: "30px", width: "300px" },
+          "& > :not(style)": { width: "100%", maxWidth: 380, mx: "auto" },
         }}
         noValidate
         autoComplete="off"
@@ -64,25 +64,27 @@ export default function Login() {
           style={{
             width: "100%",
             maxWidth: "380px",
-            margin: "100px auto ",
-            paddingRight: "10px",
+            margin: "0 auto",
+            padding: "0 16px 20px",
           }}
         >
-          <img
-            src={Image}
-            alt="logo"
-            width="380"
-            height="220"
-            style={{
-              marginLeft: "17px",
-              marginBottom: "20px",
-              marginTop: "30px",
-              borderRadius: "5px",
-            }}
-          />
+          <Grid item xs={12}>
+            <Box sx={{ textAlign: "center", mt: { xs: 2, sm: 8 } }}>
+              <img
+                src={Image}
+                alt="logo"
+                style={{
+                  width: "100%",
+                  maxWidth: 380,
+                  height: "auto",
+                  borderRadius: "5px",
+                }}
+              />
+            </Box>
+          </Grid>
           <Grid item xs={12}>
             <FormControl variant="standard" fullWidth>
-              <Grid item xs={12} mb="40px">
+              <Grid item xs={12} mb={{ xs: 1.5, sm: 2.5 }}>
                 <TextField
                   type="email"
                   label="Nombre y apellido"
@@ -94,18 +96,20 @@ export default function Login() {
                   onChange={handleInputChange}
                 />
               </Grid>
-              <TextField
-                type="password"
-                label="Contraseña"
-                variant="outlined"
-                name="Password"
-                fullWidth
-                id="fullWidth"
-                size="small"
-                onChange={handleInputChange}
-              />
+              <Grid item xs={12} mb={{ xs: 1.5, sm: 2.5 }}>
+                <TextField
+                  type="password"
+                  label="Contraseña"
+                  variant="outlined"
+                  name="Password"
+                  fullWidth
+                  id="fullWidth"
+                  size="small"
+                  onChange={handleInputChange}
+                />
+              </Grid>
 
-              <Grid item xs={12} mt="40px">
+              <Grid item xs={12} mt={{ xs: 1, sm: 2.5 }}>
                 <Button variant="contained" fullWidth onClick={onSubmit}>
                   Ingresar
                 </Button>

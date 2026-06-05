@@ -54,23 +54,23 @@ export default function AdminUserForm() {
       <AdminDrawer />
       <Box
         component="form"
-        sx={{ "& > :not(style)": { width: "300px", margin: "0 auto" } }}
+        sx={{ "& > :not(style)": { width: "100%", maxWidth: 380, mx: "auto", px: 2 } }}
         noValidate
         autoComplete="off"
       >
         <Grid
           container
-          spacing={2}
+          spacing={{ xs: 0.5, sm: 2 }}
           style={{
             width: "100%",
             maxWidth: "380px",
-            margin: "40px auto",
-            paddingRight: "10px",
+            margin: "0 auto",
+            padding: "8px 0 20px",
           }}
         >
           <Grid item xs={12}>
             <FormControl variant="standard" fullWidth>
-              <Grid item xs={12} mb="20px">
+              <Grid item xs={12} mb={{ xs: 1, sm: 1.5 }}>
                 <TextField
                   label="Nombre y Apellido"
                   name="username"
@@ -82,7 +82,7 @@ export default function AdminUserForm() {
                   required
                 />
               </Grid>
-              <Grid item xs={12} mb="20px">
+              <Grid item xs={12} mb={{ xs: 1, sm: 1.5 }}>
                 <TextField
                   label="Email"
                   name="Email"
@@ -95,7 +95,7 @@ export default function AdminUserForm() {
                   required
                 />
               </Grid>
-              <Grid item xs={12} mb="20px">
+              <Grid item xs={12} mb={{ xs: 1, sm: 1.5 }}>
                 <TextField
                   label="Contraseña"
                   name="Password"

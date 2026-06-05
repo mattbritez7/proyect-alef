@@ -105,26 +105,25 @@ const SaleForm = () => {
       <Box
         component="form"
         sx={{
-          "& > :not(style)": { width: "300px", margin: "0 auto" },
+          "& > :not(style)": { width: "100%", maxWidth: 380, mx: "auto", px: 2 },
         }}
         noValidate
         autoComplete="off"
       >
         <Grid
           container
-          spacing={2}
+          spacing={{ xs: 0.5, sm: 2 }}
           style={{
             width: "100%",
             maxWidth: "380px",
             margin: "0 auto",
-            paddingRight: "10px",
             paddingBottom: "20px",
-            paddingTop: "0px",
+            paddingTop: "8px",
           }}
         >
-          <Grid item xs={12} style={{ paddingTop: "0px" }}>
+          <Grid item xs={12}>
             <FormControl variant="standard" fullWidth>
-              <Grid item xs={12} mb="40px">
+              <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
                 <TextField
                   label="Nombre y Apellido"
                   name="Nombre"
@@ -138,7 +137,7 @@ const SaleForm = () => {
                   required
                 />
               </Grid>
-              <Grid item xs={12} mb="40px">
+              <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
                 <TextField
                   label="Producto"
                   name="Producto"
@@ -152,7 +151,7 @@ const SaleForm = () => {
                   required
                 />
               </Grid>
-              <Grid item xs={12} mb="40px">
+              <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
                 <TextField
                   label="Precio Del Producto"
                   name="Precio"
@@ -167,7 +166,7 @@ const SaleForm = () => {
                   required
                 />
               </Grid>
-              <Grid item xs={12} mb="40px">
+              <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
                 <TextField
                   label="Plan"
                   name="Dias"
@@ -182,7 +181,7 @@ const SaleForm = () => {
                   required
                 />
               </Grid>
-              <Grid item xs={12} mb="40px">
+              <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
                 <TextField
                   label="Dni"
                   name="Dni"
@@ -197,7 +196,7 @@ const SaleForm = () => {
                   required
                 />
               </Grid>
-              <Grid item xs={12} mb="40px">
+              <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
                 <TextField
                   label="Fecha De Nacimiento"
                   name="FechaDeNacimiento"
@@ -213,7 +212,7 @@ const SaleForm = () => {
                   required
                 />
               </Grid>
-              <Grid item xs={12} mb="40px">
+              <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
                 <TextField
                   label="Direccion Del Comercio"
                   name="DireccionDelComercio"
@@ -228,7 +227,7 @@ const SaleForm = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} mb="40px">
+              <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
                 <TextField
                   label="Entre Calles"
                   name="EntreCalles"
@@ -242,7 +241,7 @@ const SaleForm = () => {
                   required
                 />
               </Grid>
-              <Grid item xs={12} mb="40px">
+              <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
                 <TextField
                   label="Direccion de la casa"
                   name="DireccionCasa"
@@ -256,7 +255,7 @@ const SaleForm = () => {
                   required
                 />
               </Grid>
-              <Grid item xs={12} mb="40px">
+              <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
                 <TextField
                   label="Localidad"
                   name="Localidad"
@@ -270,7 +269,7 @@ const SaleForm = () => {
                   required
                 />
               </Grid>
-              <Grid item xs={12} mb="40px">
+              <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
                 <TextField
                   label="Telefono 1"
                   name="Telefono1"

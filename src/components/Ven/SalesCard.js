@@ -30,8 +30,8 @@ export default function SalesCard() {
   return (
     <>
       <Drawer />
-      <Box sx={{ width: 1 }} display="grid">
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 3 }}>
+      <Box sx={{ width: 1, px: { xs: 1, sm: 0 } }} display="grid">
+        <Grid container rowSpacing={{ xs: 0.5, sm: 1 }} columnSpacing={{ xs: 1, sm: 3 }}>
           {sell.length === 0 ? (
             <Grid item xs={12}>
               <Box sx={{ textAlign: "center", mt: 4, color: "text.secondary", fontSize: 18 }}>

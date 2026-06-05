@@ -15,23 +15,17 @@ export default function SuccessLogin() {
         style={{
           width: "100%",
           maxWidth: "380px",
-          margin: "0 auto ",
-          paddingRight: "10px",
-          paddingBottom: "100px",
-          paddingTop: "300px",
+          margin: "0 auto",
+          padding: "0 16px",
         }}
       >
-        <h1 style={{ paddingLeft: "130px", margin: "0px" }}>Ingreso</h1>
-
-        <h1 style={{ paddingLeft: "85px", margin: "0px" }}>correctamente</h1>
-        <Grid item xs={12} mt="40px">
-          <Link to="/sales">
-            <Button
-              variant="contained"
-              type="submit"
-              textDecoration="none"
-              fullWidth
-            >
+        <Grid item xs={12} sx={{ textAlign: "center", mt: { xs: 8, sm: 20 } }}>
+          <h1 style={{ margin: "4px 0" }}>Ingreso</h1>
+          <h1 style={{ margin: "4px 0" }}>correctamente</h1>
+        </Grid>
+        <Grid item xs={12} mt={{ xs: 3, sm: 4 }}>
+          <Link to="/sales" style={{ textDecoration: "none" }}>
+            <Button variant="contained" fullWidth>
               Ir Al Panel
             </Button>
           </Link>

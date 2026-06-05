@@ -21,6 +21,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AodIcon from "@mui/icons-material/Aod";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PeopleIcon from "@mui/icons-material/People";
+import BusinessIcon from "@mui/icons-material/Business";
 
 import { useAuth } from "../../context/AuthContext";
 
@@ -169,6 +170,18 @@ export default function PersistentDrawerRight() {
                 <PeopleIcon />
               </ListItemIcon>
               <ListItemText primary="Usuarios" />
+            </ListItemButton>
+          </Link>
+        </List>
+
+        <Divider />
+        <List>
+          <Link to="/companies" style={{ textDecoration: "none" }}>
+            <ListItemButton>
+              <ListItemIcon>
+                <BusinessIcon />
+              </ListItemIcon>
+              <ListItemText primary="Empresas" />
             </ListItemButton>
           </Link>
         </List>

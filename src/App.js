@@ -7,6 +7,7 @@ import UserList from "./components/Adm/UserList";
 import SaleForm from "./components/Ven/SaleForm";
 import AdminSaleForm from "./components/Adm/SaleForm";
 import AdminDrawer from "./components/Adm/Drawer";
+import CompanyList from "./components/Adm/CompanyList";
 
 import Home from "./components/Home";
 
@@ -29,6 +30,7 @@ const App = () => {
           <ProtectedRoute exact path="/new-sale" component={SaleForm} />
           <AdminRoute exact path="/new-sale-admin" component={AdminSaleForm} />
           <AdminRoute exact path="/" component={AdminDrawer} />
+          <AdminRoute exact path="/companies" component={CompanyList} />
           <AdminRoute exact path="/sales" component={SalesList} />
           <AdminRoute exact path="/sales/:id" component={SaleDetail} />
           <ProtectedRoute exact path="/my-sales" component={SalesList} />
