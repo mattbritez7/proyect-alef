@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import httpClient from "../../utils/httpClient";
 import AdminDrawer from "./Drawer";
 
@@ -15,6 +16,8 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 
 export default function AdminUserForm() {
+  const history = useHistory();
+  const [countdown, setCountdown] = useState(0);
   const [data, setData] = useState({
     username: "",
     Email: "",
@@ -29,6 +32,20 @@ export default function AdminUserForm() {
   useEffect(() => {
     httpClient.get("/companies").then((res) => setCompanies(res.data)).catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (success) {
+      setCountdown(3);
+      const interval = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+      const timer = setTimeout(() => history.push("/users"), 3000);
+      return () => {
+        clearTimeout(timer);
+        clearInterval(interval);
+      };
+    }
+  }, [success, history]);
 
   const handleInputChange = (event) => {
     setData({ ...data, [event.target.name]: event.target.value });
@@ -124,27 +141,26 @@ export default function AdminUserForm() {
                   onChange={handleInputChange}
                   label="Rol"
                 >
-                  <MenuItem value="admin">Administrador/a</MenuItem>
+                  <MenuItem value="administrador">Administrador/a</MenuItem>
                   <MenuItem value="vendedor">Vendedor/a</MenuItem>
                   <MenuItem value="cliente">Cliente</MenuItem>
                 </Select>
               </FormControl>
-              {data.role === 'cliente' && (
-                <FormControl variant="outlined" sx={{ mb: 2 }} size="small" fullWidth>
-                  <InputLabel id="company-label">Empresa</InputLabel>
-                  <Select
-                    labelId="company-label"
-                    name="Company"
-                    value={data.Company}
-                    onChange={handleInputChange}
-                    label="Empresa"
-                  >
-                    {companies.map((c) => (
-                      <MenuItem key={c._id} value={c.name}>{c.name}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              )}
+              <FormControl variant="outlined" sx={{ mb: 2 }} size="small" fullWidth>
+                <InputLabel id="company-label">Empresa</InputLabel>
+                <Select
+                  labelId="company-label"
+                  name="Company"
+                  value={data.Company}
+                  onChange={handleInputChange}
+                  label="Empresa"
+                >
+                  <MenuItem value=""><em>Sin empresa</em></MenuItem>
+                  {companies.map((c) => (
+                    <MenuItem key={c._id} value={c.name}>{c.name}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
               <Grid item xs={12} mt="20px">
                 <Button variant="contained" fullWidth onClick={onSubmit}>
                   Crear Usuario
@@ -152,7 +168,7 @@ export default function AdminUserForm() {
               </Grid>
               {success && (
                 <Grid item xs={12} mt="20px">
-                  <Alert severity="success">Usuario creado correctamente</Alert>
+                  <Alert severity="success">Usuario creado correctamente — redirigiendo en {countdown}s</Alert>
                 </Grid>
               )}
             </FormControl>

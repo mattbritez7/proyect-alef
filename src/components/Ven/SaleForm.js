@@ -2,11 +2,9 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import httpClient from "../../utils/httpClient";
-import Loading from "./Loading";
-import Drawer from "./Drawer";
 import { useAuth } from "../../context/AuthContext";
-import CircularProgress from "@mui/material/CircularProgress";
-
+import AdminDrawer from "../Adm/Drawer";
+import VenDrawer from "./Drawer";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
@@ -33,6 +31,7 @@ const initialData = {
 
 const SaleForm = () => {
   const [newSale, setNewSale] = useState(false);
+  const [countdown, setCountdown] = useState(0);
   const [error, setError] = useState(null);
   const history = useHistory();
   const { user } = useAuth();
@@ -40,15 +39,11 @@ const SaleForm = () => {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (user && (user.role === 'cliente' || user.role === 'vendedor')) {
-      history.replace("/my-sales");
-    }
-  }, [user, history]);
-
-  useEffect(() => {
     if (newSale) {
-      const timer = setTimeout(() => history.push("/sales"), 3000);
-      return () => clearTimeout(timer);
+      setCountdown(3);
+      const interval = setInterval(() => setCountdown((p) => p - 1), 1000);
+      const timer = setTimeout(() => history.push("/my-sales"), 3000);
+      return () => { clearTimeout(timer); clearInterval(interval); };
     }
   }, [newSale, history]);
 
@@ -104,12 +99,21 @@ const SaleForm = () => {
   };
 
   if (newSale) {
-    return <Loading />;
+    return (
+      <>
+        {user?.role === 'administrador' ? <AdminDrawer /> : <VenDrawer />}
+        <Box sx={{ textAlign: "center", mt: 10 }}>
+          <Alert severity="success" sx={{ maxWidth: 380, mx: "auto" }}>
+            Venta cargada correctamente — redirigiendo en {countdown}s
+          </Alert>
+        </Box>
+      </>
+    );
   }
 
   return (
     <div>
-      <Drawer />
+      {user?.role === 'administrador' ? <AdminDrawer /> : <VenDrawer />}
       <Box
         component="form"
         sx={{

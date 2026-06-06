@@ -5,7 +5,6 @@ import AdminUserForm from "./components/Adm/UserForm";
 import UserList from "./components/Adm/UserList";
 
 import SaleForm from "./components/Ven/SaleForm";
-import AdminSaleForm from "./components/Adm/SaleForm";
 import AdminDrawer from "./components/Adm/Drawer";
 import CompanyList from "./components/Adm/CompanyList";
 
@@ -28,7 +27,6 @@ const App = () => {
           <AdminRoute exact path="/new-user" component={AdminUserForm} />
           <ProtectedRoute exact path="/home" component={Home} />
           <ProtectedRoute exact path="/new-sale" component={SaleForm} />
-          <AdminRoute exact path="/new-sale-admin" component={AdminSaleForm} />
           <AdminRoute exact path="/" component={AdminDrawer} />
           <AdminRoute exact path="/companies" component={CompanyList} />
           <AdminRoute exact path="/sales" component={SalesList} />

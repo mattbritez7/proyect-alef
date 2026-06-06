@@ -142,7 +142,7 @@ export default function AdminSalesCard() {
                     <Typography variant="subtitle2" color="text.secondary">
                       {new Date(parseInt(item._id.substring(0, 8), 16) * 1000).toLocaleDateString("es-AR")}
                     </Typography>
-                    {user?.role === 'admin' ? (
+                    {user?.role === 'administrador' ? (
                       <Box sx={{ display: "flex", gap: 0.5 }}>
                         <Select
                           size="small"

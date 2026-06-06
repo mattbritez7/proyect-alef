@@ -152,7 +152,7 @@ export default function PersistentDrawerRight() {
 
         <Divider />
         <List>
-          <Link to="/new-sale-admin" style={{ textDecoration: "none" }}>
+          <Link to="/new-sale" style={{ textDecoration: "none" }}>
             <ListItemButton>
               <ListItemIcon>
                 <AddCircleIcon />

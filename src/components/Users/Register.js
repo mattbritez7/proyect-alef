@@ -161,7 +161,7 @@ export default function Register() {
                     defaultValue=""
                   >
                     <MenuItem value="vendedor">Vendedor/a</MenuItem>
-                    <MenuItem value="admin">Administrador/a</MenuItem>
+                    <MenuItem value="administrador">Administrador/a</MenuItem>
                   </Select>
                 </Grid>
               </FormControl>

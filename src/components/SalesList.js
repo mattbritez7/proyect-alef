@@ -32,7 +32,7 @@ export default function SalesList() {
   const [loading, setLoading] = useState(true);
 
   const fetchSales = () => {
-    const endpoint = role === 'admin' ? "/sales" : "/sales";
+    const endpoint = role === 'administrador' ? "/sales" : "/sales";
     httpClient
       .get(endpoint)
       .then((res) => {
@@ -93,7 +93,7 @@ export default function SalesList() {
 
   return (
     <>
-      {role === 'admin' ? <AdminDrawer /> : <VenDrawer />}
+      {role === 'administrador' ? <AdminDrawer /> : <VenDrawer />}
 
       <Box sx={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: { xs: 0.5, sm: 2 }, my: 2, px: 1 }}>
         {["Todas", "Pendiente", "Aprobado", "Entregado"].map((status) => (
@@ -129,13 +129,13 @@ export default function SalesList() {
               <Grid item xs={12} sm={12} md={4} key={item._id}>
                 <Paper
                   sx={{ p: 2, cursor: "pointer", "&:hover": { opacity: 0.85 } }}
-                  onClick={() => history.push(`/${role === 'admin' ? "sales" : "my-sales"}/${item._id}`)}
+                  onClick={() => history.push(`/${role === 'administrador' ? "sales" : "my-sales"}/${item._id}`)}
                 >
                   <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
                     <Typography variant="subtitle2" color="text.secondary">
                       {new Date(parseInt(item._id.substring(0, 8), 16) * 1000).toLocaleDateString("es-AR")}
                     </Typography>
-                    {role === 'admin' ? (
+                    {role === 'administrador' ? (
                       <Box sx={{ display: "flex", gap: 0.5 }}>
                         <Select
                           size="small"

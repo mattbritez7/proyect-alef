@@ -8,7 +8,7 @@ export default function AdminRoute({ component: Component, ...rest }) {
   const history = useHistory();
 
   useEffect(() => {
-    if (!loading && !(user && user.role === 'admin')) {
+    if (!loading && !(user && user.role === 'administrador')) {
       history.replace("/login");
     }
   }, [loading, user, history]);
@@ -17,7 +17,7 @@ export default function AdminRoute({ component: Component, ...rest }) {
     <Box display="flex" justifyContent="center" mt={10}>
       <CircularProgress />
     </Box>
-  ) : user && user.role === 'admin' ? (
+  ) : user && user.role === 'administrador' ? (
     <Route {...rest} render={(props) => <Component {...props} />} />
   ) : null;
 }

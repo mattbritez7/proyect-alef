@@ -33,7 +33,7 @@ export default function Login() {
       .then((res) => {
         login(res.data);
         const role = res.data.role;
-        history.push(role === 'admin' ? "/sales" : "/my-sales");
+        history.push(role === 'administrador' ? "/sales" : "/my-sales");
       })
       .catch((err) => {
         const msg = err.response?.data?.message || "Error al iniciar sesión";

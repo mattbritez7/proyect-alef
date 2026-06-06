@@ -15,15 +15,23 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
 
 export default function UserList() {
   const history = useHistory();
   const [users, setUsers] = useState([]);
+  const [companies, setCompanies] = useState([]);
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const [editUser, setEditUser] = useState(null);
   const [newPassword, setNewPassword] = useState("");
+  const [editRole, setEditRole] = useState("");
+  const [editCompany, setEditCompany] = useState("");
 
-  useEffect(() => {
+  const fetchUsers = () => {
     httpClient
       .get("/users")
       .then((res) => setUsers(res.data))
@@ -31,26 +39,41 @@ export default function UserList() {
         const msg = err.response?.data?.message || "Error al cargar usuarios";
         setError(msg);
       });
+  };
+
+  useEffect(() => {
+    fetchUsers();
+    httpClient.get("/companies").then((res) => setCompanies(res.data)).catch(() => {});
   }, []);
 
   const handleEdit = (user) => {
     setEditUser(user);
     setNewPassword("");
+    setEditRole(user.role || "vendedor");
+    setEditCompany(user.Company || "");
   };
 
   const handleSave = () => {
-    if (!newPassword || newPassword.length < 6) {
-      setError("La contraseña debe tener al menos 6 caracteres");
-      return;
+    const update = {};
+    if (newPassword) {
+      if (newPassword.length < 6) {
+        setError("La contraseña debe tener al menos 6 caracteres");
+        return;
+      }
+      update.Password = newPassword;
     }
+    if (editRole) update.role = editRole;
+    update.Company = editCompany;
     httpClient
-      .put(`/users/${editUser._id}`, { Password: newPassword })
+      .put(`/users/${editUser._id}`, update)
       .then(() => {
+        setSuccess("Usuario actualizado");
         setEditUser(null);
         setNewPassword("");
+        fetchUsers();
       })
       .catch((err) => {
-        const msg = err.response?.data?.message || "Error al actualizar contraseña";
+        const msg = err.response?.data?.message || "Error al actualizar usuario";
         setError(msg);
       });
   };
@@ -84,7 +107,7 @@ export default function UserList() {
                       {user.Email}
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
-                      {user.IsAdmin ? "Administrador" : user.role === 'admin' ? "Administrador" : user.role === 'vendedor' ? "Vendedor" : "Cliente"}
+                      {user.IsAdmin ? "Administrador" : user.role === 'administrador' ? "Administrador" : user.role === 'vendedor' ? "Vendedor" : "Cliente"}
                     </Typography>
                     {user.role === 'cliente' && user.Company && (
                       <Typography variant="caption" display="block" color="info.main">
@@ -93,7 +116,7 @@ export default function UserList() {
                     )}
                   </Box>
                   <Button size="small" variant="outlined" onClick={() => handleEdit(user)}>
-                    Cambiar Contraseña
+                    Editar
                   </Button>
                 </Paper>
               </Grid>
@@ -102,15 +125,41 @@ export default function UserList() {
         </Grid>
       </Box>
 
-      <Dialog open={!!editUser} onClose={() => setEditUser(null)}>
+      <Dialog open={!!editUser} onClose={() => setEditUser(null)} maxWidth="sm" fullWidth>
         <DialogTitle>
-          Cambiar contraseña — {editUser?.username}
+          Editar usuario — {editUser?.username}
         </DialogTitle>
         <DialogContent>
+          <FormControl variant="outlined" size="small" fullWidth sx={{ mt: 1, mb: 2 }}>
+            <InputLabel id="edit-role-label">Rol</InputLabel>
+            <Select
+              labelId="edit-role-label"
+              value={editRole}
+              onChange={(e) => setEditRole(e.target.value)}
+              label="Rol"
+            >
+              <MenuItem value="administrador">Administrador</MenuItem>
+              <MenuItem value="vendedor">Vendedor</MenuItem>
+              <MenuItem value="cliente">Cliente</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl variant="outlined" size="small" fullWidth sx={{ mb: 2 }}>
+            <InputLabel id="edit-company-label">Empresa</InputLabel>
+            <Select
+              labelId="edit-company-label"
+              value={editCompany}
+              onChange={(e) => setEditCompany(e.target.value)}
+              label="Empresa"
+            >
+              <MenuItem value=""><em>Sin empresa</em></MenuItem>
+              {companies.map((c) => (
+                <MenuItem key={c._id} value={c.name}>{c.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <TextField
-            autoFocus
             margin="dense"
-            label="Nueva contraseña"
+            label="Nueva contraseña (dejar vacío para no cambiar)"
             type="password"
             fullWidth
             variant="outlined"
@@ -133,6 +182,16 @@ export default function UserList() {
       >
         <Alert severity="error" onClose={() => setError(null)}>
           {error}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={!!success}
+        autoHideDuration={3000}
+        onClose={() => setSuccess(null)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity="success" onClose={() => setSuccess(null)}>
+          {success}
         </Alert>
       </Snackbar>
     </>
