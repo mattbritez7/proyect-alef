@@ -77,7 +77,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export default function PersistentDrawerRight() {
   const theme = useTheme();
   const history = useHistory();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const [open, setOpen] = React.useState(false);
 
   const handleLogout = () => {
@@ -99,7 +99,7 @@ export default function PersistentDrawerRight() {
       <AppBar position="fixed" open={open}>
         <Toolbar>
           <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-            Inicio
+            {user?.username || "Inicio"}
           </Typography>
           <IconButton
             color="inherit"

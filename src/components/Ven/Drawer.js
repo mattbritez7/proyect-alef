@@ -95,7 +95,7 @@ export default function PersistentDrawerRight() {
       <AppBar position="fixed" open={open}>
         <Toolbar>
           <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-            Inicio
+            {user?.username || "Inicio"}
           </Typography>
           <IconButton
             color="inherit"
