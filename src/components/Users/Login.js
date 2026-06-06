@@ -28,7 +28,7 @@ export default function Login() {
     httpClient
       .post("/users/login", {
         password: data.Password,
-        email: data.username,
+        username: data.username,
       })
       .then((res) => {
         login(res.data);
