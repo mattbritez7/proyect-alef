@@ -13,11 +13,23 @@ import Box from "@mui/material/Box";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
-const estadoMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado" };
-const codeMap = { Pendiente: 1, Aprobado: 2, Entregado: 3 };
+const estadoMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado", 4: "Desaprobado" };
+const codeMap = { Pendiente: 1, Aprobado: 2, Entregado: 3, Desaprobado: 4 };
+const estadoColor = {
+  Pendiente: "#FFC107",
+  Aprobado: "#4CAF50",
+  Entregado: "#2196F3",
+  Desaprobado: "#F44336",
+};
 
 export default function SalesList() {
   const history = useHistory();
@@ -30,6 +42,8 @@ export default function SalesList() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [deleteDialog, setDeleteDialog] = useState({ open: false, id: null });
+  const [statusDialog, setStatusDialog] = useState({ open: false, id: null, status: "" });
 
   const fetchSales = () => {
     const endpoint = role === 'administrador' ? "/sales" : "/sales";
@@ -87,6 +101,16 @@ export default function SalesList() {
       });
   };
 
+  const confirmDelete = () => {
+    deleteTask(deleteDialog.id);
+    setDeleteDialog({ open: false, id: null });
+  };
+
+  const confirmStatus = () => {
+    editTask(statusDialog.id, statusDialog.status);
+    setStatusDialog({ open: false, id: null, status: "" });
+  };
+
   const displayed = sell.filter(
     (item) => filter === "Todas" || (estadoMap[item.Estado] || "Pendiente") === filter
   );
@@ -96,7 +120,7 @@ export default function SalesList() {
       {role === 'administrador' ? <AdminDrawer /> : <VenDrawer />}
 
       <Box sx={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: { xs: 0.5, sm: 2 }, my: 2, px: 1 }}>
-        {["Todas", "Pendiente", "Aprobado", "Entregado"].map((status) => (
+        {["Todas", "Pendiente", "Aprobado", "Entregado", "Desaprobado"].map((status) => (
           <Box
             key={status}
             onClick={() => setFilter(status)}
@@ -143,9 +167,9 @@ export default function SalesList() {
                           name="Estado"
                           sx={{ fontSize: 12, height: 30 }}
                           onClick={(e) => e.stopPropagation()}
-                          onChange={(e) => editTask(item._id, e.target.value)}
+                          onChange={(e) => setStatusDialog({ open: true, id: item._id, status: e.target.value })}
                         >
-                          {["Pendiente", "Aprobado", "Entregado"].map((s) => (
+                          {["Pendiente", "Aprobado", "Entregado", "Desaprobado"].map((s) => (
                             <MenuItem key={s} value={s}>{s}</MenuItem>
                           ))}
                         </Select>
@@ -164,7 +188,7 @@ export default function SalesList() {
                             <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
                           ))}
                         </Select>
-                        <IconButton size="small" onClick={(e) => { e.stopPropagation(); deleteTask(item._id); }}>
+                        <IconButton size="small" onClick={(e) => { e.stopPropagation(); setDeleteDialog({ open: true, id: item._id }); }}>
                           <DeleteIcon fontSize="small" />
                         </IconButton>
                       </Box>
@@ -175,23 +199,36 @@ export default function SalesList() {
                         name="Estado"
                         sx={{ fontSize: 12, height: 30 }}
                         onClick={(e) => e.stopPropagation()}
-                        onChange={(e) => editTask(item._id, e.target.value)}
+                        onChange={(e) => setStatusDialog({ open: true, id: item._id, status: e.target.value })}
                       >
-                        {["Pendiente", "Aprobado", "Entregado"].map((s) => (
+                        {["Pendiente", "Aprobado", "Entregado", "Desaprobado"].map((s) => (
                           <MenuItem key={s} value={s}>{s}</MenuItem>
                         ))}
                       </Select>
                     ) : (
-                      <Typography variant="caption" fontWeight="bold">
+                      <Box
+                        sx={{
+                          px: 1.5,
+                          py: 0.5,
+                          borderRadius: 1,
+                          fontSize: 12,
+                          fontWeight: "bold",
+                          color: "white",
+                          bgcolor: estadoColor[estadoMap[item.Estado] || "Pendiente"],
+                        }}
+                      >
                         {estadoMap[item.Estado] || "Pendiente"}
-                      </Typography>
+                      </Box>
                     )}
                   </Box>
-                  <Typography variant="body1" fontWeight="bold">
-                    {item.Nombre}
+                  <Typography variant="body1" sx={{ fontWeight: "bold", lineHeight: 1.8 }}>
+                    Cliente: {item.Nombre}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {item.Producto}
+                  <Typography variant="body1" sx={{ fontWeight: "bold", lineHeight: 1.8 }}>
+                    Producto: {item.Producto}
+                  </Typography>
+                  <Typography variant="body1" sx={{ fontWeight: "bold", lineHeight: 1.8 }}>
+                    Vendedor: {item.user}
                   </Typography>
                 </Paper>
               </Grid>
@@ -200,6 +237,30 @@ export default function SalesList() {
         </Grid>
       </Box>
 
+      <Dialog open={statusDialog.open} onClose={() => setStatusDialog({ open: false, id: null, status: "" })}>
+        <DialogTitle>Confirmar cambio de estado</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            ¿Estás seguro de que deseas cambiar el estado de esta venta a "{statusDialog.status}"?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setStatusDialog({ open: false, id: null, status: "" })}>Cancelar</Button>
+          <Button onClick={confirmStatus} color="primary" variant="contained">Confirmar</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={deleteDialog.open} onClose={() => setDeleteDialog({ open: false, id: null })}>
+        <DialogTitle>Confirmar eliminación</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            ¿Estás seguro de que deseas eliminar esta venta? Esta acción no se puede deshacer.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialog({ open: false, id: null })}>Cancelar</Button>
+          <Button onClick={confirmDelete} color="error" variant="contained">Eliminar</Button>
+        </DialogActions>
+      </Dialog>
       <Snackbar
         open={!!error}
         autoHideDuration={4000}

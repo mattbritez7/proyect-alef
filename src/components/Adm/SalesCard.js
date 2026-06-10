@@ -15,8 +15,8 @@ import Typography from "@mui/material/Typography";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
-const estadoMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado" };
-const codeMap = { Pendiente: 1, Aprobado: 2, Entregado: 3 };
+const estadoMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado", 4: "Desaprobado" };
+const codeMap = { Pendiente: 1, Aprobado: 2, Entregado: 3, Desaprobado: 4 };
 
 export default function AdminSalesCard() {
   const history = useHistory();
@@ -90,7 +90,7 @@ export default function AdminSalesCard() {
       <AdminDrawer />
 
       <Box sx={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: { xs: 0.5, sm: 2 }, my: 2, px: 1 }}>
-        {["Todas", "Pendiente", "Aprobado", "Entregado"].map((status) => (
+        {["Todas", "Pendiente", "Aprobado", "Entregado", "Desaprobado"].map((status) => (
           <Box
             key={status}
             onClick={() => setFilter(status)}
@@ -152,7 +152,7 @@ export default function AdminSalesCard() {
                           onClick={(e) => e.stopPropagation()}
                           onChange={(e) => editTask(item._id, e.target.value)}
                         >
-                          {["Pendiente", "Aprobado", "Entregado"].map((s) => (
+                          {["Pendiente", "Aprobado", "Entregado", "Desaprobado"].map((s) => (
                             <MenuItem key={s} value={s}>{s}</MenuItem>
                           ))}
                         </Select>
@@ -184,7 +184,7 @@ export default function AdminSalesCard() {
                         onClick={(e) => e.stopPropagation()}
                         onChange={(e) => editTask(item._id, e.target.value)}
                       >
-                        {["Pendiente", "Aprobado", "Entregado"].map((s) => (
+                        {["Pendiente", "Aprobado", "Entregado", "Desaprobado"].map((s) => (
                           <MenuItem key={s} value={s}>{s}</MenuItem>
                         ))}
                       </Select>

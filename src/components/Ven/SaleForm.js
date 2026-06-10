@@ -8,6 +8,9 @@ import VenDrawer from "./Drawer";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
@@ -19,6 +22,7 @@ const initialData = {
   Producto: "",
   Precio: "",
   Dias: "",
+  Modalidad: "",
   Dni: "",
   FechaDeNacimiento: "",
   DireccionDelComercio: "",
@@ -39,6 +43,12 @@ const SaleForm = () => {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
+    if (user?.role === 'cliente') {
+      history.replace("/my-sales");
+    }
+  }, [user, history]);
+
+  useEffect(() => {
     if (newSale) {
       setCountdown(3);
       const interval = setInterval(() => setCountdown((p) => p - 1), 1000);
@@ -54,6 +64,7 @@ const SaleForm = () => {
     if (!data.Precio || isNaN(Number(data.Precio)) || Number(data.Precio) <= 0)
       errs.Precio = "Debe ser un número positivo";
     if (!data.Dias || isNaN(Number(data.Dias)) || Number(data.Dias) <= 0) errs.Dias = "Debe ser un número positivo";
+    if (!data.Modalidad) errs.Modalidad = "Campo obligatorio";
     if (!data.Dni || !/^\d{7,8}$/.test(data.Dni)) errs.Dni = "Debe tener 7 u 8 dígitos";
     if (!data.FechaDeNacimiento) errs.FechaDeNacimiento = "Campo obligatorio";
     if (!data.DireccionDelComercio) errs.DireccionDelComercio = "Campo obligatorio";
@@ -76,6 +87,7 @@ const SaleForm = () => {
         Producto: data.Producto,
         Precio: Number(data.Precio),
         Dias: data.Dias,
+        Modalidad: data.Modalidad,
         Dni: data.Dni,
         FechaDeNacimiento: data.FechaDeNacimiento,
         DireccionDelComercio: data.DireccionDelComercio,
@@ -87,7 +99,7 @@ const SaleForm = () => {
       })
       .then(() => setNewSale(true))
       .catch((err) => {
-        const msg = err.response?.data?.message || "Error al subir venta";
+        const msg = err.response?.data?.message || "Error al ingresar venta";
         setError(msg);
       });
   };
@@ -164,23 +176,29 @@ const SaleForm = () => {
                 />
               </Grid>
               <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
-                <TextField
-                  label="Precio Del Producto"
-                  name="Precio"
-                  type="number"
-                  variant="outlined"
-                  fullWidth
-                  id="fullWidth"
-                  size="small"
-                  onChange={handleInputChange}
-                  error={!!errors.Precio}
-                  helperText={errors.Precio}
-                  required
-                />
+                <FormControl variant="outlined" fullWidth size="small" error={!!errors.Modalidad} required>
+                  <InputLabel id="modalidad-label" required>Modalidad del plan</InputLabel>
+                  <Select
+                    labelId="modalidad-label"
+                    label="Modalidad del plan"
+                    name="Modalidad"
+                    value={data.Modalidad}
+                    onChange={handleInputChange}
+                  >
+                    <MenuItem value="diario">Diario</MenuItem>
+                    <MenuItem value="semanal">Semanal</MenuItem>
+                    <MenuItem value="mensual">Mensual</MenuItem>
+                  </Select>
+                  {errors.Modalidad && (
+                    <Box sx={{ color: "error.main", fontSize: 12, mt: 0.5, ml: 1.5 }}>
+                      {errors.Modalidad}
+                    </Box>
+                  )}
+                </FormControl>
               </Grid>
-              <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
+               <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
                 <TextField
-                  label="Plan"
+                  label="Plan (Dias)"
                   name="Dias"
                   type="number"
                   variant="outlined"
@@ -193,6 +211,23 @@ const SaleForm = () => {
                   required
                 />
               </Grid>
+              <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
+                <TextField
+                  label="Precio del plan"
+                  name="Precio"
+                  type="number"
+                  variant="outlined"
+                  fullWidth
+                  id="fullWidth"
+                  size="small"
+                  onChange={handleInputChange}
+                  error={!!errors.Precio}
+                  helperText={errors.Precio}
+                  required
+                />
+              </Grid>
+             
+              
               <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
                 <TextField
                   label="Dni"
@@ -316,7 +351,7 @@ const SaleForm = () => {
                   fullWidth
                   onClick={onSubmit}
                 >
-                  Subir venta
+                  Ingresar venta
                 </Button>
               </Grid>
             </FormControl>

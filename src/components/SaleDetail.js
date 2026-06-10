@@ -12,14 +12,15 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-const estadoMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado" };
+const estadoMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado", 4: "Desaprobado" };
 
 const fields = [
   { label: "Estado", key: "Estado" },
   { label: "Nombre y Apellido", key: "Nombre" },
   { label: "Producto", key: "Producto" },
-  { label: "Precio Del producto", key: "Precio" },
-  { label: "Plan", key: "Dias" },
+  { label: "Modalidad del plan", key: "Modalidad" },
+  { label: "Plan (Dias)", key: "Dias" },
+  { label: "Precio del plan", key: "Precio" },
   { label: "Dni", key: "Dni" },
   { label: "Fecha de Nacimiento", key: "FechaDeNacimiento" },
   { label: "Direccion Del Comercio", key: "DireccionDelComercio" },
@@ -28,6 +29,7 @@ const fields = [
   { label: "Localidad", key: "Localidad" },
   { label: "Telefono 1", key: "Telefono1" },
   { label: "Telefono 2", key: "Telefono2" },
+  { label: "Vendedor", key: "user" },
 ];
 
 export default function SaleDetail() {

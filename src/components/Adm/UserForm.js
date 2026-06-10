@@ -14,6 +14,10 @@ import Alert from "@mui/material/Alert";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 export default function AdminUserForm() {
   const history = useHistory();
@@ -28,6 +32,7 @@ export default function AdminUserForm() {
   const [companies, setCompanies] = useState([]);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     httpClient.get("/companies").then((res) => setCompanies(res.data)).catch(() => {});
@@ -123,13 +128,22 @@ export default function AdminUserForm() {
                 <TextField
                   label="Contraseña"
                   name="Password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   variant="outlined"
                   fullWidth
                   size="small"
                   value={data.Password}
                   onChange={handleInputChange}
                   required
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={() => setShowPassword((s) => !s)} edge="end" size="small">
+                          {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
               <FormControl variant="outlined" sx={{ mb: 2 }} size="small" fullWidth>
@@ -146,21 +160,23 @@ export default function AdminUserForm() {
                   <MenuItem value="cliente">Cliente</MenuItem>
                 </Select>
               </FormControl>
-              <FormControl variant="outlined" sx={{ mb: 2 }} size="small" fullWidth>
-                <InputLabel id="company-label">Empresa</InputLabel>
-                <Select
-                  labelId="company-label"
-                  name="Company"
-                  value={data.Company}
-                  onChange={handleInputChange}
-                  label="Empresa"
-                >
-                  <MenuItem value=""><em>Sin empresa</em></MenuItem>
-                  {companies.map((c) => (
-                    <MenuItem key={c._id} value={c.name}>{c.name}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              {data.role === "cliente" && (
+                <FormControl variant="outlined" sx={{ mb: 2 }} size="small" fullWidth>
+                  <InputLabel id="company-label">Empresa</InputLabel>
+                  <Select
+                    labelId="company-label"
+                    name="Company"
+                    value={data.Company}
+                    onChange={handleInputChange}
+                    label="Empresa"
+                  >
+                    <MenuItem value=""><em>Sin empresa</em></MenuItem>
+                    {companies.map((c) => (
+                      <MenuItem key={c._id} value={c.name}>{c.name}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
               <Grid item xs={12} mt="20px">
                 <Button variant="contained" fullWidth onClick={onSubmit}>
                   Crear Usuario
