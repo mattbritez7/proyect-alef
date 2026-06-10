@@ -13,6 +13,12 @@ import Box from "@mui/material/Box";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
@@ -30,6 +36,8 @@ export default function SalesList() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [deleteDialog, setDeleteDialog] = useState({ open: false, id: null });
+  const [statusDialog, setStatusDialog] = useState({ open: false, id: null, status: "" });
 
   const fetchSales = () => {
     const endpoint = role === 'administrador' ? "/sales" : "/sales";
@@ -85,6 +93,16 @@ export default function SalesList() {
         const msg = err.response?.data?.message || "Error al asignar empresa";
         setError(msg);
       });
+  };
+
+  const confirmDelete = () => {
+    deleteTask(deleteDialog.id);
+    setDeleteDialog({ open: false, id: null });
+  };
+
+  const confirmStatus = () => {
+    editTask(statusDialog.id, statusDialog.status);
+    setStatusDialog({ open: false, id: null, status: "" });
   };
 
   const displayed = sell.filter(
@@ -143,7 +161,7 @@ export default function SalesList() {
                           name="Estado"
                           sx={{ fontSize: 12, height: 30 }}
                           onClick={(e) => e.stopPropagation()}
-                          onChange={(e) => editTask(item._id, e.target.value)}
+                          onChange={(e) => setStatusDialog({ open: true, id: item._id, status: e.target.value })}
                         >
                           {["Pendiente", "Aprobado", "Entregado"].map((s) => (
                             <MenuItem key={s} value={s}>{s}</MenuItem>
@@ -164,7 +182,7 @@ export default function SalesList() {
                             <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
                           ))}
                         </Select>
-                        <IconButton size="small" onClick={(e) => { e.stopPropagation(); deleteTask(item._id); }}>
+                        <IconButton size="small" onClick={(e) => { e.stopPropagation(); setDeleteDialog({ open: true, id: item._id }); }}>
                           <DeleteIcon fontSize="small" />
                         </IconButton>
                       </Box>
@@ -175,7 +193,7 @@ export default function SalesList() {
                         name="Estado"
                         sx={{ fontSize: 12, height: 30 }}
                         onClick={(e) => e.stopPropagation()}
-                        onChange={(e) => editTask(item._id, e.target.value)}
+                        onChange={(e) => setStatusDialog({ open: true, id: item._id, status: e.target.value })}
                       >
                         {["Pendiente", "Aprobado", "Entregado"].map((s) => (
                           <MenuItem key={s} value={s}>{s}</MenuItem>
@@ -200,6 +218,30 @@ export default function SalesList() {
         </Grid>
       </Box>
 
+      <Dialog open={statusDialog.open} onClose={() => setStatusDialog({ open: false, id: null, status: "" })}>
+        <DialogTitle>Confirmar cambio de estado</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            ¿Estás seguro de que deseas cambiar el estado de esta venta a "{statusDialog.status}"?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setStatusDialog({ open: false, id: null, status: "" })}>Cancelar</Button>
+          <Button onClick={confirmStatus} color="primary" variant="contained">Confirmar</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={deleteDialog.open} onClose={() => setDeleteDialog({ open: false, id: null })}>
+        <DialogTitle>Confirmar eliminación</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            ¿Estás seguro de que deseas eliminar esta venta? Esta acción no se puede deshacer.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialog({ open: false, id: null })}>Cancelar</Button>
+          <Button onClick={confirmDelete} color="error" variant="contained">Eliminar</Button>
+        </DialogActions>
+      </Dialog>
       <Snackbar
         open={!!error}
         autoHideDuration={4000}
