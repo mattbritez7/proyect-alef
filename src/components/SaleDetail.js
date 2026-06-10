@@ -20,6 +20,7 @@ const fields = [
   { label: "Producto", key: "Producto" },
   { label: "Precio Del producto", key: "Precio" },
   { label: "Plan", key: "Dias" },
+  { label: "Modalidad del plan", key: "Modalidad" },
   { label: "Dni", key: "Dni" },
   { label: "Fecha de Nacimiento", key: "FechaDeNacimiento" },
   { label: "Direccion Del Comercio", key: "DireccionDelComercio" },
