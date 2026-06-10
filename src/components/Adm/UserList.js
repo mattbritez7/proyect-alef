@@ -8,11 +8,14 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import Select from "@mui/material/Select";
@@ -30,6 +33,7 @@ export default function UserList() {
   const [newPassword, setNewPassword] = useState("");
   const [editRole, setEditRole] = useState("");
   const [editCompany, setEditCompany] = useState("");
+  const [deleteDialog, setDeleteDialog] = useState({ open: false, id: null });
 
   const fetchUsers = () => {
     httpClient
@@ -51,6 +55,24 @@ export default function UserList() {
     setNewPassword("");
     setEditRole(user.role || "vendedor");
     setEditCompany(user.Company || "");
+  };
+
+  const deleteUser = (id) => {
+    httpClient
+      .delete(`/users/${id}`)
+      .then(() => {
+        setSuccess("Usuario eliminado");
+        fetchUsers();
+      })
+      .catch((err) => {
+        const msg = err.response?.data?.message || "Error al eliminar usuario";
+        setError(msg);
+      });
+  };
+
+  const confirmDelete = () => {
+    deleteUser(deleteDialog.id);
+    setDeleteDialog({ open: false, id: null });
   };
 
   const handleSave = () => {
@@ -115,9 +137,14 @@ export default function UserList() {
                       </Typography>
                     )}
                   </Box>
-                  <Button size="small" variant="outlined" onClick={() => handleEdit(user)}>
-                    Editar
-                  </Button>
+                  <Box sx={{ display: "flex", gap: 0.5 }}>
+                    <Button size="small" variant="outlined" onClick={() => handleEdit(user)}>
+                      Editar
+                    </Button>
+                    <IconButton size="small" color="error" onClick={() => setDeleteDialog({ open: true, id: user._id })}>
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </Box>
                 </Paper>
               </Grid>
             ))
@@ -174,6 +201,18 @@ export default function UserList() {
         </DialogActions>
       </Dialog>
 
+      <Dialog open={deleteDialog.open} onClose={() => setDeleteDialog({ open: false, id: null })}>
+        <DialogTitle>Confirmar eliminación</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            ¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialog({ open: false, id: null })}>Cancelar</Button>
+          <Button onClick={confirmDelete} color="error" variant="contained">Eliminar</Button>
+        </DialogActions>
+      </Dialog>
       <Snackbar
         open={!!error}
         autoHideDuration={4000}

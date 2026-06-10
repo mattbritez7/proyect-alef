@@ -39,6 +39,12 @@ const SaleForm = () => {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
+    if (user?.role === 'cliente') {
+      history.replace("/my-sales");
+    }
+  }, [user, history]);
+
+  useEffect(() => {
     if (newSale) {
       setCountdown(3);
       const interval = setInterval(() => setCountdown((p) => p - 1), 1000);
@@ -87,7 +93,7 @@ const SaleForm = () => {
       })
       .then(() => setNewSale(true))
       .catch((err) => {
-        const msg = err.response?.data?.message || "Error al subir venta";
+        const msg = err.response?.data?.message || "Error al ingresar venta";
         setError(msg);
       });
   };
@@ -316,7 +322,7 @@ const SaleForm = () => {
                   fullWidth
                   onClick={onSubmit}
                 >
-                  Subir venta
+                  Ingresar venta
                 </Button>
               </Grid>
             </FormControl>

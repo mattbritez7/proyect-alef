@@ -12,7 +12,7 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-const estadoMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado" };
+const estadoMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado", 4: "Desaprobado" };
 
 const fields = [
   { label: "Estado", key: "Estado" },
@@ -28,6 +28,7 @@ const fields = [
   { label: "Localidad", key: "Localidad" },
   { label: "Telefono 1", key: "Telefono1" },
   { label: "Telefono 2", key: "Telefono2" },
+  { label: "Vendedor", key: "user" },
 ];
 
 export default function SaleDetail() {

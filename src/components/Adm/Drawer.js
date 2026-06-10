@@ -157,7 +157,7 @@ export default function PersistentDrawerRight() {
               <ListItemIcon>
                 <AddCircleIcon />
               </ListItemIcon>
-              <ListItemText primary="Subir Venta" />
+              <ListItemText primary="Ingresar Venta" />
             </ListItemButton>
           </Link>
         </List>

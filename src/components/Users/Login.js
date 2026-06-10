@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import Image from "../../images/image1.jpg";
+import Image from "../../images/imagen3.jpeg";
 import httpClient from "../../utils/httpClient";
 import { useAuth } from "../../context/AuthContext";
 
