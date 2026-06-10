@@ -16,6 +16,9 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import DeleteIcon from "@mui/icons-material/Delete";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import Select from "@mui/material/Select";
@@ -34,6 +37,7 @@ export default function UserList() {
   const [editRole, setEditRole] = useState("");
   const [editCompany, setEditCompany] = useState("");
   const [deleteDialog, setDeleteDialog] = useState({ open: false, id: null });
+  const [showPassword, setShowPassword] = useState(false);
 
   const fetchUsers = () => {
     httpClient
@@ -187,12 +191,21 @@ export default function UserList() {
           <TextField
             margin="dense"
             label="Nueva contraseña (dejar vacío para no cambiar)"
-            type="password"
+            type={showPassword ? "text" : "password"}
             fullWidth
             variant="outlined"
             size="small"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowPassword((s) => !s)} edge="end" size="small">
+                    {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
         </DialogContent>
         <DialogActions>

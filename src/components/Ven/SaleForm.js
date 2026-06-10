@@ -196,6 +196,21 @@ const SaleForm = () => {
                   )}
                 </FormControl>
               </Grid>
+               <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
+                <TextField
+                  label="Plan (Dias)"
+                  name="Dias"
+                  type="number"
+                  variant="outlined"
+                  fullWidth
+                  id="fullWidth"
+                  size="small"
+                  onChange={handleInputChange}
+                  error={!!errors.Dias}
+                  helperText={errors.Dias}
+                  required
+                />
+              </Grid>
               <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
                 <TextField
                   label="Precio del plan"
@@ -211,21 +226,7 @@ const SaleForm = () => {
                   required
                 />
               </Grid>
-              <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
-                <TextField
-                  label="Plan (Dias)"
-                  name="Dias"
-                  type="number"
-                  variant="outlined"
-                  fullWidth
-                  id="fullWidth"
-                  size="small"
-                  onChange={handleInputChange}
-                  error={!!errors.Dias}
-                  helperText={errors.Dias}
-                  required
-                />
-              </Grid>
+             
               
               <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
                 <TextField

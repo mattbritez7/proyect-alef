@@ -24,6 +24,12 @@ import Alert from "@mui/material/Alert";
 
 const estadoMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado", 4: "Desaprobado" };
 const codeMap = { Pendiente: 1, Aprobado: 2, Entregado: 3, Desaprobado: 4 };
+const estadoColor = {
+  Pendiente: "#FFC107",
+  Aprobado: "#4CAF50",
+  Entregado: "#2196F3",
+  Desaprobado: "#F44336",
+};
 
 export default function SalesList() {
   const history = useHistory();
@@ -200,9 +206,19 @@ export default function SalesList() {
                         ))}
                       </Select>
                     ) : (
-                      <Typography variant="caption" fontWeight="bold">
+                      <Box
+                        sx={{
+                          px: 1.5,
+                          py: 0.5,
+                          borderRadius: 1,
+                          fontSize: 12,
+                          fontWeight: "bold",
+                          color: "white",
+                          bgcolor: estadoColor[estadoMap[item.Estado] || "Pendiente"],
+                        }}
+                      >
                         {estadoMap[item.Estado] || "Pendiente"}
-                      </Typography>
+                      </Box>
                     )}
                   </Box>
                   <Typography variant="body1" sx={{ fontWeight: "bold", lineHeight: 1.8 }}>

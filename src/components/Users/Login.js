@@ -1,5 +1,9 @@
 import * as React from "react";
 import { useState } from "react";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useHistory } from "react-router-dom";
 import Image from "../../images/imagen3.jpeg";
 import httpClient from "../../utils/httpClient";
@@ -21,6 +25,7 @@ export default function Login() {
     username: "",
   });
   const [error, setError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -98,7 +103,7 @@ export default function Login() {
               </Grid>
               <Grid item xs={12} mb={{ xs: 1.5, sm: 2.5 }}>
                 <TextField
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   label="Contraseña"
                   variant="outlined"
                   name="Password"
@@ -106,6 +111,15 @@ export default function Login() {
                   id="fullWidth"
                   size="small"
                   onChange={handleInputChange}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={() => setShowPassword((s) => !s)} edge="end" size="small">
+                          {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
 
