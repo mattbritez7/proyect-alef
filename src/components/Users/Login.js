@@ -41,7 +41,10 @@ export default function Login() {
         history.push(role === 'administrador' ? "/sales" : "/my-sales");
       })
       .catch((err) => {
-        const msg = err.response?.data?.message || "Error al iniciar sesión";
+        const msg = err.detailedMessage ||
+          err.response?.data?.msg ||
+          err.response?.data?.message ||
+          "Error al iniciar sesión";
         setError(msg);
       });
   };

@@ -101,7 +101,10 @@ const SaleForm = () => {
       })
       .then(() => setNewSale(true))
       .catch((err) => {
-        const msg = err.response?.data?.message || "Error al ingresar venta";
+        const msg = err.detailedMessage ||
+          err.response?.data?.msg ||
+          err.response?.data?.message ||
+          "Error al ingresar venta";
         setError(msg);
       });
   };
