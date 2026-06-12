@@ -21,6 +21,7 @@ const initialData = {
   Nombre: "",
   Producto: "",
   Precio: "",
+  ValorCuota: "",
   Dias: "",
   Modalidad: "",
   Dni: "",
@@ -86,6 +87,7 @@ const SaleForm = () => {
         Nombre: data.Nombre,
         Producto: data.Producto,
         Precio: Number(data.Precio),
+        ValorCuota: Number(data.ValorCuota),
         Dias: data.Dias,
         Modalidad: data.Modalidad,
         Dni: data.Dni,
@@ -177,10 +179,10 @@ const SaleForm = () => {
               </Grid>
               <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
                 <FormControl variant="outlined" fullWidth size="small" error={!!errors.Modalidad} required>
-                  <InputLabel id="modalidad-label" required>Modalidad del plan</InputLabel>
+                  <InputLabel id="modalidad-label" required>Plan de pago</InputLabel>
                   <Select
                     labelId="modalidad-label"
-                    label="Modalidad del plan"
+                    label="Plan de pago"
                     name="Modalidad"
                     value={data.Modalidad}
                     onChange={handleInputChange}
@@ -198,7 +200,7 @@ const SaleForm = () => {
               </Grid>
                <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
                 <TextField
-                  label="Plan (Dias)"
+                  label={data.Modalidad ? `Plan (${data.Modalidad === "diario" ? "Dias" : data.Modalidad === "semanal" ? "Semanal" : "Mensual"})` : "Plan (Dias)"}
                   name="Dias"
                   type="number"
                   variant="outlined"
@@ -226,8 +228,18 @@ const SaleForm = () => {
                   required
                 />
               </Grid>
-             
-              
+               <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
+                <TextField
+                  label="Valor cuota"
+                  name="ValorCuota"
+                  type="number"
+                  variant="outlined"
+                  fullWidth
+                  id="fullWidth"
+                  size="small"
+                  onChange={handleInputChange}
+                />
+              </Grid>
               <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
                 <TextField
                   label="Dni"

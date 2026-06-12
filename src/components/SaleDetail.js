@@ -24,9 +24,10 @@ const fields = [
   { label: "Estado", key: "Estado" },
   { label: "Nombre y Apellido", key: "Nombre" },
   { label: "Producto", key: "Producto" },
-  { label: "Modalidad del plan", key: "Modalidad" },
+  { label: "Plan de pago", key: "Modalidad" },
   { label: "Plan (Dias)", key: "Dias" },
   { label: "Precio del plan", key: "Precio" },
+  { label: "Valor cuota", key: "ValorCuota" },
   { label: "Dni", key: "Dni" },
   { label: "Fecha de Nacimiento", key: "FechaDeNacimiento" },
   { label: "Direccion Del Comercio", key: "DireccionDelComercio" },
@@ -90,27 +91,32 @@ export default function SaleDetail() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {fields.map((f) => (
-                <TableRow key={f.key}>
-                  <TableCell component="th" scope="row">{f.label}</TableCell>
-                  <TableCell>{f.key === "Estado" ? (
-                    <Box
-                      component="span"
-                      sx={{
-                        px: 1.5,
-                        py: 0.5,
-                        borderRadius: 1,
-                        fontSize: 12,
-                        fontWeight: "bold",
-                        color: "white",
-                        bgcolor: statusColor[statusMap[sale.Estado] || "Pendiente"],
-                      }}
-                    >
-                      {statusMap[sale.Estado] || "Pendiente"}
-                    </Box>
-                  ) : (sale[f.key] || "-")}</TableCell>
-                </TableRow>
-              ))}
+              {fields.map((f) => {
+                const planLabel = f.key === "Dias"
+                  ? `Plan (${sale.Modalidad === "Diario" ? "Dias" : sale.Modalidad === "Semanal" ? "Semanal" : "Quincenal"})`
+                  : f.label;
+                return (
+                  <TableRow key={f.key}>
+                    <TableCell component="th" scope="row">{planLabel}</TableCell>
+                    <TableCell>{f.key === "Estado" ? (
+                      <Box
+                        component="span"
+                        sx={{
+                          px: 1.5,
+                          py: 0.5,
+                          borderRadius: 1,
+                          fontSize: 12,
+                          fontWeight: "bold",
+                          color: "white",
+                          bgcolor: statusColor[statusMap[sale.Estado] || "Pendiente"],
+                        }}
+                      >
+                        {statusMap[sale.Estado] || "Pendiente"}
+                      </Box>
+                    ) : (sale[f.key] || "-")}</TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
