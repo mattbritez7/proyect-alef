@@ -168,6 +168,11 @@ export default function SalesList() {
                           sx={{ fontSize: 12, height: 30 }}
                           onClick={(e) => e.stopPropagation()}
                           onChange={(e) => setStatusDialog({ open: true, id: item._id, status: e.target.value })}
+                          renderValue={(v) => (
+                            <Box sx={{ bgcolor: statusColor[v], color: "white", px: 1.5, py: 0.25, borderRadius: 1, fontWeight: "bold", fontSize: 12 }}>
+                              {v}
+                            </Box>
+                          )}
                         >
                           {["Pendiente", "Aprobado", "Entregado", "Desaprobado"].map((s) => (
                             <MenuItem key={s} value={s}>{s}</MenuItem>
@@ -200,6 +205,11 @@ export default function SalesList() {
                         sx={{ fontSize: 12, height: 30 }}
                         onClick={(e) => e.stopPropagation()}
                         onChange={(e) => setStatusDialog({ open: true, id: item._id, status: e.target.value })}
+                        renderValue={(v) => (
+                          <Box sx={{ bgcolor: statusColor[v], color: "white", px: 1.5, py: 0.25, borderRadius: 1, fontWeight: "bold", fontSize: 12 }}>
+                            {v}
+                          </Box>
+                        )}
                       >
                         {["Pendiente", "Aprobado", "Entregado", "Desaprobado"].map((s) => (
                           <MenuItem key={s} value={s}>{s}</MenuItem>
