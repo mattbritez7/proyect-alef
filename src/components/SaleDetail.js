@@ -34,6 +34,7 @@ const fields = [
   { label: "Entre Calles", key: "EntreCalles" },
   { label: "Direccion De La Casa", key: "DireccionCasa" },
   { label: "Localidad", key: "Localidad" },
+  { label: "Tipo de comercio", key: "TipoComercio" },
   { label: "Telefono 1", key: "Telefono1" },
   { label: "Telefono 2", key: "Telefono2" },
   { label: "Vendedor", key: "user" },

@@ -30,6 +30,7 @@ const initialData = {
   EntreCalles: "",
   DireccionCasa: "",
   Localidad: "",
+  TipoComercio: "",
   Telefono1: "",
   Telefono2: "",
 };
@@ -96,6 +97,7 @@ const SaleForm = () => {
         EntreCalles: data.EntreCalles,
         DireccionCasa: data.DireccionCasa,
         Localidad: data.Localidad,
+        TipoComercio: data.TipoComercio,
         Telefono1: data.Telefono1,
         Telefono2: data.Telefono2,
       })
@@ -329,6 +331,17 @@ const SaleForm = () => {
                   error={!!errors.Localidad}
                   helperText={errors.Localidad}
                   required
+                />
+              </Grid>
+              <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
+                <TextField
+                  label="Tipo de comercio"
+                  name="TipoComercio"
+                  variant="outlined"
+                  fullWidth
+                  id="fullWidth"
+                  size="small"
+                  onChange={handleInputChange}
                 />
               </Grid>
               <Grid item xs={12} mb={{ xs: 1, sm: 2.5 }}>
