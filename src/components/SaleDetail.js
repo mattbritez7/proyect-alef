@@ -12,7 +12,13 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-const estadoMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado", 4: "Desaprobado" };
+const statusMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado", 4: "Desaprobado" };
+const statusColor = {
+  Pendiente: "#FFC107",
+  Aprobado: "#4CAF50",
+  Entregado: "#2196F3",
+  Desaprobado: "#F44336",
+};
 
 const fields = [
   { label: "Estado", key: "Estado" },
@@ -87,7 +93,22 @@ export default function SaleDetail() {
               {fields.map((f) => (
                 <TableRow key={f.key}>
                   <TableCell component="th" scope="row">{f.label}</TableCell>
-                  <TableCell>{f.key === "Estado" ? (estadoMap[sale.Estado] || "Pendiente") : (sale[f.key] || "-")}</TableCell>
+                  <TableCell>{f.key === "Estado" ? (
+                    <Box
+                      component="span"
+                      sx={{
+                        px: 1.5,
+                        py: 0.5,
+                        borderRadius: 1,
+                        fontSize: 12,
+                        fontWeight: "bold",
+                        color: "white",
+                        bgcolor: statusColor[statusMap[sale.Estado] || "Pendiente"],
+                      }}
+                    >
+                      {statusMap[sale.Estado] || "Pendiente"}
+                    </Box>
+                  ) : (sale[f.key] || "-")}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

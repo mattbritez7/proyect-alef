@@ -22,9 +22,9 @@ import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
-const estadoMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado", 4: "Desaprobado" };
+const statusMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado", 4: "Desaprobado" };
 const codeMap = { Pendiente: 1, Aprobado: 2, Entregado: 3, Desaprobado: 4 };
-const estadoColor = {
+const statusColor = {
   Pendiente: "#FFC107",
   Aprobado: "#4CAF50",
   Entregado: "#2196F3",
@@ -112,7 +112,7 @@ export default function SalesList() {
   };
 
   const displayed = sell.filter(
-    (item) => filter === "Todas" || (estadoMap[item.Estado] || "Pendiente") === filter
+    (item) => filter === "Todas" || (statusMap[item.Estado] || "Pendiente") === filter
   );
 
   return (
@@ -163,7 +163,7 @@ export default function SalesList() {
                       <Box sx={{ display: "flex", gap: 0.5 }}>
                         <Select
                           size="small"
-                          value={estadoMap[item.Estado] || "Pendiente"}
+                          value={statusMap[item.Estado] || "Pendiente"}
                           name="Estado"
                           sx={{ fontSize: 12, height: 30 }}
                           onClick={(e) => e.stopPropagation()}
@@ -195,7 +195,7 @@ export default function SalesList() {
                     ) : role === 'cliente' ? (
                       <Select
                         size="small"
-                        value={estadoMap[item.Estado] || "Pendiente"}
+                        value={statusMap[item.Estado] || "Pendiente"}
                         name="Estado"
                         sx={{ fontSize: 12, height: 30 }}
                         onClick={(e) => e.stopPropagation()}
@@ -214,10 +214,10 @@ export default function SalesList() {
                           fontSize: 12,
                           fontWeight: "bold",
                           color: "white",
-                          bgcolor: estadoColor[estadoMap[item.Estado] || "Pendiente"],
+                          bgcolor: statusColor[statusMap[item.Estado] || "Pendiente"],
                         }}
                       >
-                        {estadoMap[item.Estado] || "Pendiente"}
+                        {statusMap[item.Estado] || "Pendiente"}
                       </Box>
                     )}
                   </Box>

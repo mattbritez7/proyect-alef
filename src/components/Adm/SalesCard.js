@@ -15,8 +15,14 @@ import Typography from "@mui/material/Typography";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
-const estadoMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado", 4: "Desaprobado" };
+const statusMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado", 4: "Desaprobado" };
 const codeMap = { Pendiente: 1, Aprobado: 2, Entregado: 3, Desaprobado: 4 };
+const statusColor = {
+  Pendiente: "#FFC107",
+  Aprobado: "#4CAF50",
+  Entregado: "#2196F3",
+  Desaprobado: "#F44336",
+};
 
 export default function AdminSalesCard() {
   const history = useHistory();
@@ -112,7 +118,7 @@ export default function AdminSalesCard() {
 
       {(() => {
         const filtered = sell.filter(
-          (item) => filter === "Todas" || (estadoMap[item.Estado] || "Pendiente") === filter
+          (item) => filter === "Todas" || (statusMap[item.Estado] || "Pendiente") === filter
         );
         return (
           <Box sx={{ width: 1, px: { xs: 1, sm: 0 } }} display="grid">
@@ -146,7 +152,7 @@ export default function AdminSalesCard() {
                       <Box sx={{ display: "flex", gap: 0.5 }}>
                         <Select
                           size="small"
-                          value={estadoMap[item.Estado] || "Pendiente"}
+                          value={statusMap[item.Estado] || "Pendiente"}
                           name="Estado"
                           sx={{ fontSize: 12, height: 30 }}
                           onClick={(e) => e.stopPropagation()}
@@ -178,7 +184,7 @@ export default function AdminSalesCard() {
                     ) : user?.role === 'cliente' ? (
                       <Select
                         size="small"
-                        value={estadoMap[item.Estado] || "Pendiente"}
+                        value={statusMap[item.Estado] || "Pendiente"}
                         name="Estado"
                         sx={{ fontSize: 12, height: 30 }}
                         onClick={(e) => e.stopPropagation()}
@@ -189,9 +195,19 @@ export default function AdminSalesCard() {
                         ))}
                       </Select>
                     ) : (
-                      <Typography variant="caption" fontWeight="bold">
-                        {estadoMap[item.Estado] || "Pendiente"}
-                      </Typography>
+                      <Box
+                        sx={{
+                          px: 1.5,
+                          py: 0.5,
+                          borderRadius: 1,
+                          fontSize: 12,
+                          fontWeight: "bold",
+                          color: "white",
+                          bgcolor: statusColor[statusMap[item.Estado] || "Pendiente"],
+                        }}
+                      >
+                        {statusMap[item.Estado] || "Pendiente"}
+                      </Box>
                     )}
                   </Box>
                   <Typography variant="body1" fontWeight="bold">

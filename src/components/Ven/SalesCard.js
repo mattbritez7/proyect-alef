@@ -10,7 +10,13 @@ import Typography from "@mui/material/Typography";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
-const estadoMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado", 4: "Desaprobado" };
+const statusMap = { 1: "Pendiente", 2: "Aprobado", 3: "Entregado", 4: "Desaprobado" };
+const statusColor = {
+  Pendiente: "#FFC107",
+  Aprobado: "#4CAF50",
+  Entregado: "#2196F3",
+  Desaprobado: "#F44336",
+};
 
 export default function SalesCard() {
   const history = useHistory();
@@ -50,9 +56,19 @@ export default function SalesCard() {
                     <Typography variant="subtitle2" color="text.secondary">
                       {new Date(parseInt(item._id.substring(0, 8), 16) * 1000).toLocaleDateString("es-AR")}
                     </Typography>
-                    <Typography variant="caption" fontWeight="bold">
-                      {estadoMap[item.Estado] || "Pendiente"}
-                    </Typography>
+                    <Box
+                      sx={{
+                        px: 1.5,
+                        py: 0.5,
+                        borderRadius: 1,
+                        fontSize: 12,
+                        fontWeight: "bold",
+                        color: "white",
+                        bgcolor: statusColor[statusMap[item.Estado] || "Pendiente"],
+                      }}
+                    >
+                      {statusMap[item.Estado] || "Pendiente"}
+                    </Box>
                   </Box>
                   <Typography variant="body1" fontWeight="bold">
                     {item.Nombre}
