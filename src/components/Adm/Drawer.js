@@ -22,6 +22,7 @@ import AodIcon from "@mui/icons-material/Aod";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PeopleIcon from "@mui/icons-material/People";
 import BusinessIcon from "@mui/icons-material/Business";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 
 import { useAuth } from "../../context/AuthContext";
 
@@ -158,6 +159,18 @@ export default function PersistentDrawerRight() {
                 <AddCircleIcon />
               </ListItemIcon>
               <ListItemText primary="Ingresar Venta" />
+            </ListItemButton>
+          </Link>
+        </List>
+
+        <Divider />
+        <List>
+          <Link to="/panel-vendedor" style={{ textDecoration: "none" }}>
+            <ListItemButton>
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Panel vendedor" />
             </ListItemButton>
           </Link>
         </List>

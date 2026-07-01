@@ -12,10 +12,13 @@ import Home from "./components/Home";
 
 import SalesList from "./components/SalesList";
 import SaleDetail from "./components/SaleDetail";
+import PostsList from "./components/PostsList";
+import PostForm from "./components/Adm/PostForm";
 
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import AdminRoute from "./components/Auth/AdminRoute";
+import EmployeeRoute from "./components/Auth/EmployeeRoute";
 
 const App = () => {
   return (
@@ -33,6 +36,8 @@ const App = () => {
           <AdminRoute exact path="/sales/:id" component={SaleDetail} />
           <ProtectedRoute exact path="/my-sales" component={SalesList} />
           <ProtectedRoute exact path="/my-sales/:id" component={SaleDetail} />
+          <EmployeeRoute exact path="/panel-vendedor" component={PostsList} />
+          <AdminRoute exact path="/admin/posts/new" component={PostForm} />
           <Redirect to="/login" />
         </Switch>
       </Router>
