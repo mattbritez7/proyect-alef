@@ -39,6 +39,9 @@ export default function SalesList() {
   const [sell, setSell] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [filter, setFilter] = useState("Todas");
+  const [companyFilter, setCompanyFilter] = useState("");
+  const [sellerFilter, setSellerFilter] = useState("");
+  const [allUsers, setAllUsers] = useState([]);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -63,7 +66,10 @@ export default function SalesList() {
 
   useEffect(() => {
     httpClient.get("/companies").then((res) => setCompanies(res.data)).catch(() => {});
-  }, []);
+    if (role === 'administrador') {
+      httpClient.get("/users").then((res) => setAllUsers(res.data)).catch(() => {});
+    }
+  }, [role]);
 
   const deleteTask = (id) => {
     httpClient
@@ -112,32 +118,64 @@ export default function SalesList() {
   };
 
   const displayed = sell.filter(
-    (item) => filter === "Todas" || (statusMap[item.Estado] || "Pendiente") === filter
+    (item) => (filter === "Todas" || (statusMap[item.Estado] || "Pendiente") === filter) &&
+             (!companyFilter || item.Company === companyFilter) &&
+             (!sellerFilter || item.user === sellerFilter)
   );
 
   return (
     <>
       {role === 'administrador' ? <AdminDrawer /> : <VenDrawer />}
 
-      <Box sx={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: { xs: 0.5, sm: 2 }, my: 2, px: 1 }}>
-        {["Todas", "Pendiente", "Aprobado", "Entregado", "Desaprobado"].map((status) => (
-          <Box
-            key={status}
-            onClick={() => setFilter(status)}
-            sx={{
-              px: { xs: 1.5, sm: 3 },
-              py: 0.5,
-              borderRadius: 2,
-              cursor: "pointer",
-              fontWeight: filter === status ? "bold" : "normal",
-              bgcolor: filter === status ? "primary.main" : "grey.200",
-              color: filter === status ? "white" : "text.primary",
-              "&:hover": { opacity: 0.8 },
-            }}
-          >
-            {status}
+      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1, my: 2, px: 1 }}>
+        <Box sx={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: { xs: 0.5, sm: 2 } }}>
+          {["Todas", "Pendiente", "Aprobado", "Entregado", "Desaprobado"].map((status) => (
+            <Box
+              key={status}
+              onClick={() => setFilter(status)}
+              sx={{
+                px: { xs: 1.5, sm: 3 },
+                py: 0.5,
+                borderRadius: 2,
+                cursor: "pointer",
+                fontWeight: filter === status ? "bold" : "normal",
+                bgcolor: filter === status ? "primary.main" : "grey.200",
+                color: filter === status ? "white" : "text.primary",
+                "&:hover": { opacity: 0.8 },
+              }}
+            >
+              {status}
+            </Box>
+          ))}
+        </Box>
+        {role === 'administrador' && (
+          <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 1, width: 1 }}>
+            <Select
+              size="small"
+              value={companyFilter}
+              onChange={(e) => setCompanyFilter(e.target.value)}
+              displayEmpty
+              sx={{ minWidth: { xs: 140, sm: 160 }, fontSize: 14 }}
+            >
+              <MenuItem value="">Todas las empresas</MenuItem>
+              {companies.map((c) => (
+                <MenuItem key={c._id} value={c.name}>{c.name}</MenuItem>
+              ))}
+            </Select>
+            <Select
+              size="small"
+              value={sellerFilter}
+              onChange={(e) => setSellerFilter(e.target.value)}
+              displayEmpty
+              sx={{ minWidth: { xs: 140, sm: 160 }, fontSize: 14 }}
+            >
+              <MenuItem value="">Todos los vendedores</MenuItem>
+              {allUsers.filter((u) => u.role === 'vendedor' || u.role === 'administrador').map((u) => (
+                <MenuItem key={u._id} value={u.username}>{u.username}</MenuItem>
+              ))}
+            </Select>
           </Box>
-        ))}
+        )}
       </Box>
 
       <Box sx={{ width: 1, px: { xs: 1, sm: 0 } }} display="grid">
@@ -160,12 +198,12 @@ export default function SalesList() {
                       {new Date(parseInt(item._id.substring(0, 8), 16) * 1000).toLocaleDateString("es-AR")}
                     </Typography>
                     {role === 'administrador' ? (
-                      <Box sx={{ display: "flex", gap: 0.5 }}>
+                      <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap", justifyContent: "flex-end" }}>
                         <Select
                           size="small"
                           value={statusMap[item.Estado] || "Pendiente"}
                           name="Estado"
-                          sx={{ fontSize: 12, height: 30 }}
+                          sx={{ fontSize: 12, height: 30, minWidth: 90 }}
                           onClick={(e) => e.stopPropagation()}
                           onChange={(e) => setStatusDialog({ open: true, id: item._id, status: e.target.value })}
                           renderValue={(v) => (
@@ -182,7 +220,7 @@ export default function SalesList() {
                           size="small"
                           value={item.Company || ""}
                           name="Company"
-                          sx={{ fontSize: 12, height: 30, minWidth: 100 }}
+                          sx={{ fontSize: 12, height: 30, minWidth: { xs: 80, sm: 100 } }}
                           onClick={(e) => e.stopPropagation()}
                           onChange={(e) => editCompany(item._id, e.target.value)}
                           displayEmpty

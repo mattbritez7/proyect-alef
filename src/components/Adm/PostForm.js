@@ -34,7 +34,7 @@ export default function PostForm() {
       .post("/posts", formData)
       .then(() => {
         setSuccess("Post creado con éxito");
-        setTimeout(() => history.push("/panel-vendedor"), 1500);
+        setTimeout(() => history.push("/seller-panel"), 1500);
       })
       .catch((err) => {
         const msg = err.response?.data?.msg || "Error al crear el post";
@@ -47,33 +47,33 @@ export default function PostForm() {
     <>
       <AdminDrawer />
       <Box sx={{ width: 1, maxWidth: 500, mx: "auto", mt: { xs: 1, sm: 4 }, px: { xs: 1, sm: 0 } }}>
-        <Typography variant="h6" sx={{ mb: 2, fontSize: { xs: 16, sm: 20 } }}>
-          Nuevo Post
-        </Typography>
-        <form onSubmit={handleSubmit}>
-          <Button variant="outlined" component="label" sx={{ mb: 2, display: "block" }}>
-            {image ? image.name : "Seleccionar imagen"}
-            <input type="file" hidden accept="image/*" onChange={(e) => setImage(e.target.files[0])} />
-          </Button>
-          {image && (
-            <Box
-              component="img"
-              src={URL.createObjectURL(image)}
-              sx={{ width: 1, maxHeight: 600, objectFit: "contain", background: "#f0f0f0", mb: 2, borderRadius: 1 }}
+          <Typography variant="h6" sx={{ mb: 2, fontSize: { xs: 16, sm: 20 } }}>
+            Nuevo Post
+          </Typography>
+          <form onSubmit={handleSubmit}>
+            <Button variant="outlined" component="label" sx={{ mb: 2, display: "block" }}>
+              {image ? image.name : "Seleccionar imagen"}
+              <input type="file" hidden accept="image/*" onChange={(e) => setImage(e.target.files[0])} />
+            </Button>
+            {image && (
+              <Box
+                component="img"
+                src={URL.createObjectURL(image)}
+                sx={{ width: 1, maxHeight: 600, objectFit: "contain", background: "#f0f0f0", mb: 2, borderRadius: 1 }}
+              />
+            )}
+            <TextField
+              label="Texto del post"
+              multiline
+              rows={4}
+              fullWidth
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              sx={{ mb: 2 }}
             />
-          )}
-          <TextField
-            label="Texto del post"
-            multiline
-            rows={4}
-            fullWidth
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            sx={{ mb: 2 }}
-          />
-          <Button type="submit" variant="contained" fullWidth disabled={loading}>
-            {loading ? "Creando..." : "Crear Post"}
-          </Button>
+            <Button type="submit" variant="contained" fullWidth disabled={loading}>
+              {loading ? "Creando..." : "Crear Post"}
+            </Button>
         </form>
       </Box>
 

@@ -36,7 +36,7 @@ const App = () => {
           <AdminRoute exact path="/sales/:id" component={SaleDetail} />
           <ProtectedRoute exact path="/my-sales" component={SalesList} />
           <ProtectedRoute exact path="/my-sales/:id" component={SaleDetail} />
-          <EmployeeRoute exact path="/panel-vendedor" component={PostsList} />
+          <EmployeeRoute exact path="/seller-panel" component={PostsList} />
           <AdminRoute exact path="/admin/posts/new" component={PostForm} />
           <Redirect to="/login" />
         </Switch>

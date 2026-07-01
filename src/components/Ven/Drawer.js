@@ -150,14 +150,16 @@ export default function PersistentDrawerRight() {
         <Divider />
 
         <List>
-          <Link to="/panel-vendedor" style={{ textDecoration: "none" }}>
-            <ListItemButton>
-              <ListItemIcon>
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText primary="Panel vendedor" />
-            </ListItemButton>
-          </Link>
+          {user?.role !== 'cliente' && (
+            <Link to="/seller-panel" style={{ textDecoration: "none" }}>
+              <ListItemButton>
+                <ListItemIcon>
+                  <DashboardIcon />
+                </ListItemIcon>
+                <ListItemText primary="Panel vendedor" />
+              </ListItemButton>
+            </Link>
+          )}
         </List>
 
         <Divider />
