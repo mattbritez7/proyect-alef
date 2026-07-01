@@ -83,7 +83,6 @@ export default function PostsList() {
   };
 
   const isAdmin = user?.role === "administrador";
-  const isVendedor = user?.role === "vendedor";
 
   const imageUrl = (path) => {
     if (!path) return "";
